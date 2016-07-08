@@ -6,7 +6,8 @@
 * @version 0.1
 * @date 8 July 2016
 *
-*
+* This is not the most elegant way of doing it, but to make it so that inheriting classes can use the setters without
+* actually letting random classes in src using it, I put GameObject in its own package and used protected.
  **/
 
 public abstract class GameObject{
