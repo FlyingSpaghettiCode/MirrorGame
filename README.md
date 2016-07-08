@@ -5,3 +5,7 @@ We are making this for PC/Mac first.  It is being made in eclipse.  If we feel t
 
 
 Edgar is working on Level design and the likes, Patrick is working on the system, Adriano is working on the player(s).  If you finish early you can begin on something, try to make sure you don't work concurrently on the same thing with someone else, so ask them if you can.  If there is a new piece of code that functions well alone, but has not been implemented into the rest of the game, implement it.  Better assets will be added later, rightnow we are using MS paint style graphics and no sounds.
+
+
+
+I have made it so that only Adriano, Edgar, and Patrick can directly edgit the master branch.  However, DON'T JUST DO IT.  Please, test your code and create a new parallel branch before just implementing changes.
