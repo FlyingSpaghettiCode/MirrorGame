@@ -21,7 +21,7 @@ public abstract class Player{
   public double height(){return height;}
   public WorldType type(){return type;}
   
-  public 
+  public double area(){return w*h;}
   
   public void translateX(double x);
   public void translateY(double y);
