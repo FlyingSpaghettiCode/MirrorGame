@@ -1,0 +1,4 @@
+This is where we store the files for levels.  Rather than hardcoding every single level, we are going to take input
+from a text file and use it as a template to create the level.
+
+SYNTAX
