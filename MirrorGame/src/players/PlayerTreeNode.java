@@ -8,6 +8,7 @@
  * 
  **/ 
 public abstract class PlayerTreeNode{
+  private PlayerTree tree; //player tree
   private Player player; //its player
   
   private PlayerTreeNode parent; //the parent node
@@ -24,6 +25,9 @@ public abstract class PlayerTreeNode{
   }
   public PlayerTreeNode[] children(){
     return children;
+  }
+  public PlayerTree playerTree(){
+    return tree;
   }
   public boolean isRoot(){
     return parent == null;
