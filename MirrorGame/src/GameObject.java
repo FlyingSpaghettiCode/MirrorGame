@@ -19,6 +19,7 @@ public abstract class GameObject{
   
   public Player(){}
   
+  //getters
   public double xPosition(){return x;}
   public double yPosition(){return y;}
   public double width(){return height;}
@@ -27,4 +28,9 @@ public abstract class GameObject{
   
   public double area(){return w*h;}
   
+  //setters
+  protected void setX(double x){this.x = x;}
+  protected void setY(double y){this.y = y;}
+  protected void setWidth(double w){this.w = w;}
+  protected void setHeight(doubel h){this.h = h;}
 }
