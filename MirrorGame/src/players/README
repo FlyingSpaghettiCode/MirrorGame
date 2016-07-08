@@ -1,1 +1,4 @@
 The player system will be implemented as a tree.  There will be a maximum of 6 players and a minimum of 1.
+This will be made so that we can make implementations of players that are not connected to the tree for individual levels,
+or levels where such abstraction would simply detract from efficiency without making up for it though any other
+advantages.
