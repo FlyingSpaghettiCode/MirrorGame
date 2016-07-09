@@ -1,0 +1,33 @@
+#This is a sample script
+#Author: Adriano Hernandez
+#Date 8 July 2016
+#Version 0.1
+
+#This will spawn 
+
+#information
+NAME Sample
+FROM null
+
+#print
+DEBUG Creation of Sample level file
+
+#add our blocks in diagonal
+#these blocks have a thickness and height of 10 and are perfect squares.  the last one has a thickness and height of 100
+ADD Block 10 10
+\ Block(10) 20 20
+\ Block(10) 30 30
+\ Block(10) 40 40
+\ Block(10) 50 50
+\ Block(10) 60 60
+\ Block(10) 70 70
+\ Block(10) 80 80
+\ Block(10) 90 90
+\ Block(100,100) 100 100
+
+#tiny exit
+ADD exit(1) 420 420 #because why not
+
+RUN null #literally do nothing, just here because why not
+
+DEBUG end of file
