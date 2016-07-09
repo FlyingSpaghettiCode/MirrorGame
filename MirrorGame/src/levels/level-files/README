@@ -1,16 +1,18 @@
 This is where we store the files for levels.  Rather than hardcoding every single level, we are going to take input
-from a text file and use it as a template to create the level.
+from a text file and use it as a template to create the level.  ALL ESCAPE SEQUENCES WILL BE USED TO MEAN THEIR RESPECTIVE
+MEANINGS NOT THE LITERAL CHARACTERS.
 
 SYNTAX
 
 -Everything after "#" is a comment on a single line and is there only for the purposes of human users.
+  (\ doesn't work for comments as they are completely ignored up until \n)
 -FROM means that it will take input from another level file and use that as a template; "null" makes it start from scratch.
 -INCLUDE will include another file's code in a certain location.  Note, this is different from from in these ways:
   -You can have as many INCLUDE statements as you want, but only one FROM per level file, and it must be at the start.
   -FROM constructs a level from the other file first, then it will add to that what you have here.  If it has already
     constructed the previous level and remembers the java code for it, it will skip the actual loading process.  INCLUDE
     will just parse through the other file, making it good for creation of functions.
--Code written after a tab (\t from now on), will be interpreted as decribing the first line above it farther to the left
+-Code written after a \t, will be interpreted as decribing the first line above it farther to the left
   by one tab.  If this does not exist, parsing will fail.  You can go as deep as you want with this.
 -Code written after "\" will be read as belonging to the previous line.  This helps shorten code.
 -DEBUG will print in the debug terminal.
