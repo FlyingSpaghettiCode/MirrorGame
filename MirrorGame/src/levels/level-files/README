@@ -17,7 +17,8 @@ SYNTAX
 -ADD "x" "y" will create an immutable game object at position (x,y) where 0,0 is the top left hand corner of the screen.
 -SPAWN "x" "y" will do what add does but for characters/mutable game objects.
   (a mutable game object is one who's state can be changed after creation < during playthrough by the player; this might
-  include things like levers, buttons, moving enemies, players, etcetera)
+  include things like levers, buttons, moving enemies, players, etcetera.  You can spawn or add multiple items 
+  as you see fit on one line)
 -RUN "command" AT "time" will run the given command after "time" has passed, measured in seconds.
 -RUN "command" IF "condition" will run "command" if "condition" is met.
   -TAGS
@@ -25,7 +26,6 @@ SYNTAX
   -COMMAND SYNTAX
     -This has not been decided yet.
     -Available commands: KILL, START, ??
--
 
 PROPER PRACTICE
 
