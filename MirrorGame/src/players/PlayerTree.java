@@ -10,6 +10,7 @@ public abstract class PlayerTree{
   private int size;
   private int layers;
   private PlayerTreeNode root; //topmost node of the tree
+  private PlayerTreeNode[][] layers; //an array of layers (nodes stored in arrays)
   
   public PlayerTree(){}
   
