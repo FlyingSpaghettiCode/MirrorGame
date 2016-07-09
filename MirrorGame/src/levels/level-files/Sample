@@ -12,6 +12,12 @@ FROM null
 #print
 DEBUG Creation of Sample level file
 
+#literally just includes 4 of the same level-functions file, which is just a comment
+INCLUDE test
+INCLUDE test
+INCLUDE test
+INCLUDE test
+
 #add our blocks in diagonal
 #these blocks have a thickness and height of 10 and are perfect squares.  the last one has a thickness and height of 100
 ADD Block 10 10
