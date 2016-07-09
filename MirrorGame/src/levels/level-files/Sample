@@ -3,7 +3,7 @@
 #Date 8 July 2016
 #Version 0.1
 
-#This will spawn 
+#This will spawn a diagonal line of blocks that are 10 by 10 followed by one that is 100 by 100
 
 #information
 NAME Sample
