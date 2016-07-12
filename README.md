@@ -9,3 +9,6 @@ Edgar is working on Level design and the likes, Patrick is working on the system
 
 
 I have made it so that only Adriano, Edgar, and Patrick can directly edgit the master branch.  However, DON'T JUST DO IT.  Please, test your code and create a new parallel branch before just implementing changes.
+
+I, Adriano, am gonna try and aquire funds and distribution opporutnities to either get this game published, or our next one and in a
+monetizable fashion.
