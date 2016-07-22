@@ -1,0 +1,3 @@
+This is supposed to be the init files for a windows system.  I will make for Unix/Linux and Mac too.
+Since our game is in Java it has support through all 3 platforms nativelly, so only init has to be done seperatly.
+TXT files for level files and the such are universal.
