@@ -3,7 +3,10 @@ package game;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import levels.Level;
 import sprites.ControllableSprite;
+import sprites.MoveableSprite;
+import sprites.Sprite;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -43,7 +46,7 @@ public class Main extends Application
     Canvas canvas;
     GraphicsContext gc;
     Font font;
-    ControllableSprite testImage;
+    Level level;
     ///////////////////////////////////////////////////////////
     
     //this is a method called by launch that "starts" the game
@@ -62,7 +65,8 @@ public class Main extends Application
             public void handle(long currentNanoTime)
             {
             	//time keeper
-                double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
+                @SuppressWarnings("unused")
+				double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
                 //System.out.println(t);//lets see the time; take out comment markers to view
             	refresh();
             	draw();
@@ -81,6 +85,7 @@ public class Main extends Application
         scene = new Scene( root );
         
         stage.setScene( scene );
+        stage.setTitle("Mirror Game");
         
         canvas = new Canvas(WIDTH,HEIGHT);
         root.getChildren().add( canvas );
@@ -93,10 +98,11 @@ public class Main extends Application
         gc.setLineWidth(2);
         font = Font.font( "Times New Roman", FontWeight.BOLD, 48 );
         
-        //SPRITE AND INPUT
-    	testImage = new ControllableSprite(scene);
+        //SPRITE AND INPUT AND SCENE
+        level = new Level(scene);
+        level.addSprite(new ControllableSprite(level));
     	//write /<package>/<image.png> to get the image path
-    	testImage.setImage(new Image("/images/testImage.png"));
+    	//testImage.setImage(new Image("/images/testImage.png"));
     }
     //game loop methods
     //refreshes states of the game, can take input
@@ -108,7 +114,7 @@ public class Main extends Application
     	
         //refresh
         gc.setFont( font );
-        testImage.input();
+       	level.handle();
     }
     //all images manifest themselves on the screen
     public void draw(){
@@ -116,6 +122,6 @@ public class Main extends Application
     	gc.fillText( "DEMO", WIDTH/2-96, HEIGHT/2);
         gc.strokeText( "DEMO", WIDTH/2-96, HEIGHT/2 );
         
-    	testImage.draw(gc);
+    	level.draw(gc);
     }
 }

@@ -1,21 +1,21 @@
 package sprites;
 
-import javafx.scene.Scene;
+import levels.Level;
 
 public class MoveableSprite extends Sprite {
 
 	//constructors with full functionality
-	public MoveableSprite(Scene scene) {
-		super(scene);
+	public MoveableSprite(Level level) {
+		super(level);
 	}
-	public MoveableSprite(Scene scene, double x, double y) {
-		super(scene, x, y);
+	public MoveableSprite(Level level, double x, double y) {
+		super(level, x, y);
 	}
-	public MoveableSprite(Scene scene, double xPosition, double yPosition, String PATH) {
-		super(scene, xPosition, yPosition, PATH);
+	public MoveableSprite(Level level, double xPosition, double yPosition, String PATH) {
+		super(level, xPosition, yPosition, PATH);
 	}
-	public MoveableSprite(Scene scene, String PATH) {
-		super(scene, PATH);
+	public MoveableSprite(Level level, String PATH) {
+		super(level, PATH);
 	}
 	//constructors without full functionality
 	public MoveableSprite() {

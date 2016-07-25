@@ -5,7 +5,7 @@ package sprites;
 
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
-import javafx.scene.Scene;
+import levels.Level;
 
 /**
  * This is a sprite that can be controlled by the user.
@@ -15,43 +15,40 @@ import javafx.scene.Scene;
  */
 public class ControllableSprite extends MoveableSprite{
 
-	private KeyboardInputHandler keyIn;
-	private MouseInputHandler mouseIn;
-	
 	//constructors with full functionality
 	private void init(){
-		keyIn = new KeyboardInputHandler(this.getScene());
-		setMouseIn(new MouseInputHandler(this.getScene()));
+		//this is already set
+		//Level level = this.getLevel();
+		//level.setKeyIn(new KeyboardInputHandler(this.getLevel().getScene()));
+		//level.setMouseIn(new MouseInputHandler(this.getLevel().getScene()));
 	}
-	public ControllableSprite(Scene scene) {
-		super(scene);
+	public ControllableSprite(Level level) {
+		super(level);
 		init();
 	}
-	public ControllableSprite(Scene scene, double x, double y) {
-		super(scene, x, y);
+	public ControllableSprite(Level level, double x, double y) {
+		super(level, x, y);
 		init();
 	}
-	public ControllableSprite(Scene scene, double xPosition, double yPosition, String PATH) {
-		super(scene, xPosition, yPosition, PATH);
+	public ControllableSprite(Level level, double xPosition, double yPosition, String PATH) {
+		super(level, xPosition, yPosition, PATH);
 		init();
 	}
-	public ControllableSprite(Scene scene, String PATH) {
-		super(scene, PATH);
+	public ControllableSprite(Level level, String PATH) {
+		super(level, PATH);
 		init();
 	}
 	//by default will move according to the arrow keys and ignore mouse controls
 	//this is to be overriden in children that act differently
 	public void input(){
+		KeyboardInputHandler keyIn = getLevel().getKeyIn();
 		if(keyIn.isKeyPressed("UP")) translateY(-10);
 		if(keyIn.isKeyPressed("DOWN")) translateY(10);
 		if(keyIn.isKeyPressed("LEFT")) translateX(-10);
 		if(keyIn.isKeyPressed("RIGHT")) this.translateX(10);
 	}
-	
-	//for children
-	protected MouseInputHandler getMouseIn() {return mouseIn;}
-	protected void setMouseIn(MouseInputHandler mouseIn) {this.mouseIn = mouseIn;}
-	protected KeyboardInputHandler getKeyIn() {return keyIn;}
-	protected void setKeyIn(KeyboardInputHandler keyIn) {this.keyIn = keyIn;}
-	
+	@Override
+	public void handle(){
+		input();
+	}
 }
