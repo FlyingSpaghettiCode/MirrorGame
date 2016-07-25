@@ -7,3 +7,5 @@ on assets such as sound and graphics.
 
 If you do work on some code, don't make it batshit disorganized please.  I tried to make it easy to understand and
 nicely organized, and it would be nice to keep it like this.
+
+There is a demo executable jar of what is implemented right now in this directory.
