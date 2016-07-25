@@ -1,0 +1,3 @@
+This stores image files.  We can alternativelly store them in an external folder with a couple
+changes to the code.  This also stores code for images, not to be confused with that pertaining
+to sprites or anything else involving images
