@@ -1,1 +1,6 @@
 #readme
+
+
+You need to run this in a java project called MirrorGame.  If you have compilation errors, make sure you have
+JavaFX enabled in eclipse.  I think this used to be a problem in the past, even though it is not for me on mars anymore.
+It should not be a problem for netbeans.
