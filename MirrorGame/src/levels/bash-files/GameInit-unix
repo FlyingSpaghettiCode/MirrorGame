@@ -1,9 +1,0 @@
-#note that we are going to make it so that stuff in mac is in home
-
-mkdir ~/Spaghetti
-mkdir ~/Spaghetti/level-files
-mkdir ~/Spaghetti/game-files
-mkdir ~/Spaghetti/sound-files
-mkdir ~/Spaghetti/graphics-files
-echo FROM Adriano > ~/Spaghetti/level-files/test-level.txt
-#finish for now
