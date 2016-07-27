@@ -4,14 +4,12 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
+import sounds.SoundPlayer;
 import sprites.ControllableSprite;
-import sprites.MoveableSprite;
-import sprites.Sprite;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -47,6 +45,7 @@ public class Main extends Application
     GraphicsContext gc;
     Font font;
     Level level;
+    double i;
     ///////////////////////////////////////////////////////////
     
     //this is a method called by launch that "starts" the game
@@ -59,6 +58,8 @@ public class Main extends Application
         
     	//seperating time from init since it doesn't fit with the rest of init functions
         final long startNanoTime = System.nanoTime();//start time
+        //double t = 0; //time
+        i = 0; //iteration
         //This is the game loop.  There are different ways of doing this, but this is the easiest.
         new AnimationTimer()
         {
@@ -66,8 +67,14 @@ public class Main extends Application
             {
             	//time keeper
                 @SuppressWarnings("unused")
-				double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
+                //btw, if you want to find the actual fps (make sure it isn't lagging)
+                //divide the iteration by 60 to find what the time should be
+                //and compare that with the value of t
+				double t = (currentNanoTime - startNanoTime)/1000000000.0; 
+                i++;
+                if(i%60 == 0)new SoundPlayer("src/sounds/midClick1.mp3").playSound(); //60 for our 60 fps
                 //System.out.println(t);//lets see the time; take out comment markers to view
+                System.out.println(i);
             	refresh();
             	draw();
             }

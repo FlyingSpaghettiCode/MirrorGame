@@ -49,11 +49,11 @@ public class Player extends MoveableSprite implements Collidable{
 	//we override the movement methods because they depend on the relationships of the player
 	@Override
 	public void translateX(double x){
-		
+		if(isRoot()) super.translateX(x);
 	}
 	@Override
 	public void translateY(double y){
-		
+		if(isRoot()) super.translateY(y);
 	}
 	
 	//a player function that doubles
@@ -62,6 +62,7 @@ public class Player extends MoveableSprite implements Collidable{
 		return 2*z;
 	}
 
+	public boolean isRoot() {return parent == null;}
 	
 	//getters and setters
 	public Player getParent() {return parent;}
