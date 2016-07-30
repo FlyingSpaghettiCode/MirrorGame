@@ -4,7 +4,6 @@
 package sprites;
 
 import input.KeyboardInputHandler;
-import input.MouseInputHandler;
 import levels.Level;
 
 /**

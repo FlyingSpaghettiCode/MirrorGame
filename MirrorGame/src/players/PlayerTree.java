@@ -2,10 +2,13 @@ package players;
 
 import java.util.ArrayList;
 
+import input.KeyboardInputHandler;
+
 //a player tree
 public class PlayerTree {
 
 	private PlayerTreeNode root;
+	private KeyboardInputHandler input;
 	
 	public PlayerTree() {
 		// TODO Auto-generated constructor stub
@@ -40,5 +43,13 @@ public class PlayerTree {
 	}
 	public int size(){
 		return getNodes().size();
+	}
+
+	public KeyboardInputHandler getInput() {
+		return input;
+	}
+
+	public void setInput(KeyboardInputHandler input) {
+		this.input = input;
 	}
 }

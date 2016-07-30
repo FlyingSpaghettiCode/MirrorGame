@@ -2,10 +2,10 @@ package players;
 
 import levels.Level;
 import sprites.Collidable;
-import sprites.ControllableSprite;
+import sprites.MoveableSprite;
 
 //for now just a controllable sprite that knows it's a collidable
-public class Player extends ControllableSprite implements Collidable{
+public class Player extends MoveableSprite implements Collidable{
 
 	public Player(Level level) {
 		super(level);
