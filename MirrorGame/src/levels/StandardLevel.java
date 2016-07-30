@@ -9,8 +9,6 @@ public class StandardLevel extends Level {
 		super(scene);
 		
 		Player root = new Player(this);
-		root.setParent(null);
-		this.addSprite(root);
 	}
 
 }

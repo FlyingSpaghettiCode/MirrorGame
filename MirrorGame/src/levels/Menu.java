@@ -2,9 +2,9 @@ package levels;
 
 import javafx.scene.Scene;
 
-public class MainMenu extends Menu {
+public class Menu extends Level {
 
-	public MainMenu(Scene scene) {
+	public Menu(Scene scene) {
 		super(scene);
 		// TODO Auto-generated constructor stub
 	}

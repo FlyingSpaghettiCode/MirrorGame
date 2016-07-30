@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
+import players.Player;
 import sounds.SoundPlayer;
 import sprites.ControllableSprite;
 import javafx.scene.Scene;
@@ -107,7 +108,9 @@ public class Main extends Application
         
         //SPRITE AND INPUT AND SCENE
         level = new Level(scene);
-        level.addSprite(new ControllableSprite(level));
+        Player p1 = new Player(level);
+        level.addSprite(p1);
+        
     	//write /<package>/<image.png> to get the image path
     	//testImage.setImage(new Image("/images/testImage.png"));
     }
