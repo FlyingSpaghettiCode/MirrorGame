@@ -1,4 +1,4 @@
-# ParallelWorldGame_AndroidPhone
+# MirrorGame
 
 Work on: a level creator, sound for the game, collisions, graphics, levels.
 
