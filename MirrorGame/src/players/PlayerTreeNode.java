@@ -62,5 +62,15 @@ public class PlayerTreeNode {
 		else 
 			return false;
 	}
+	
+	
+	
+	
+	public void translateX(){
+		
+	}
+	public void translateY(){
+		
+	}
 
 }

@@ -3,15 +3,23 @@ package players;
 import java.util.ArrayList;
 
 import input.KeyboardInputHandler;
+import levels.StandardLevel;
 
 //a player tree
+/**
+ * This ia player tree class that we find in standard levels
+ * @author Adriano
+ *
+ */
 public class PlayerTree {
 
 	private PlayerTreeNode root;
-	private KeyboardInputHandler input;
+	private StandardLevel level;
 	
-	public PlayerTree() {
+	public PlayerTree(StandardLevel level) {
 		// TODO Auto-generated constructor stub
+		this.level = level;
+		root = new PlayerTreeNode();
 	}
 
 	public PlayerTreeNode getRoot() {
@@ -45,11 +53,19 @@ public class PlayerTree {
 		return getNodes().size();
 	}
 
-	public KeyboardInputHandler getInput() {
-		return input;
+	//translate methods
+	//these will tell the root to translate, which in turn tells it's children to translate
+	public void translateX(){
+		root.translateX();
 	}
-
-	public void setInput(KeyboardInputHandler input) {
-		this.input = input;
+	public void translateY(){
+		root.translateX();
+	}
+	public void input(){
+		KeyboardInputHandler keyIn = level.getKeyIn();
+		if(keyIn.isKeyPressed("UP")) this.translateY();
+		if(keyIn.isKeyPressed("DOWN")) this.translateY();
+		if(keyIn.isKeyPressed("LEFT")) this.translateX();
+		if(keyIn.isKeyPressed("RIGHT")) this.translateX();
 	}
 }
