@@ -17,8 +17,15 @@ public class LevelReader {
 
 	//basic shit
 	private String PATH;
-	public LevelReader() {
+	//PATH CAN GO ANYWHERE ON COMP
+	public LevelReader(String PATH) {
+		this.PATH = PATH;
 		// TODO Auto-generated constructor stub
+	}
+	public LevelReader(){
+		this.PATH = "C:\\Users\\" + 
+			System.getProperty("user.name") + 
+				"\\Documents\\MirrorGame\\LevelFiles\\test-level.txt";
 	}
 	private List<String> docText() throws IOException{
 		return Files.readAllLines(Paths.get(PATH));
@@ -36,17 +43,13 @@ public class LevelReader {
 			return null; // failure
 		}
 		//level creation code from txt
-		level = new Level(scene);
-		
-		
+		level = new STDLevel(scene);
 		
 		
 		
 		//return
 		return level;
 	}
-	
-	
 	
 	
 	
@@ -58,4 +61,15 @@ public class LevelReader {
 		PATH = pATH;
 	}
 
+	
+	
+	@SuppressWarnings("unused")
+	private class STDLevel extends Level{
+
+		public STDLevel(Scene scene) {
+			super(scene);
+			// TODO Auto-generated constructor stub
+		}
+		
+	}
 }

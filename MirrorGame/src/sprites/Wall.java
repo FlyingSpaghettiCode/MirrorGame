@@ -1,6 +1,6 @@
 package sprites;
 
-public class Wall implements Collidable{
+public class Wall extends Sprite implements Collidable{
 
 	public Wall() {
 		// TODO Auto-generated constructor stub

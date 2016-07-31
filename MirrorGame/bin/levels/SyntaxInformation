@@ -1,0 +1,20 @@
+***SYNTAX FOR LEVEL FILES***
+
+Continue previous line - "\"
+Write a comment - "#"
+Multiple Commands in one line - "&&"
+
+*** Definition - Keyword ***
+
+set a scene - "scene <name>"
+include text from another file - "include <file.txt>"
+
+declare a sprite - "sprite:<type> <name>: <xpos> <ypos>" + ": <additional arguments> <>"
+	Definition - Additional Arguments
+	Can collide - "-cc"
+	Color <code> - "-c=<code>"
+	
+declare a player tree - "player tree <name>" + ":<additional arguments>"
+
+declare one or more sounds - "sound (<name> at <path>:<additional arguments>)" + "(<> at <>:<>)"
+

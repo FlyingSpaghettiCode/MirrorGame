@@ -2,8 +2,9 @@ package players;
 
 import java.util.ArrayList;
 
+import levels.Level;
+
 import input.KeyboardInputHandler;
-import levels.StandardLevel;
 
 //a player tree
 /**
@@ -14,9 +15,9 @@ import levels.StandardLevel;
 public class PlayerTree {
 
 	private PlayerTreeNode root;
-	private StandardLevel level;
+	private Level level;
 	
-	public PlayerTree(StandardLevel level) {
+	public PlayerTree(Level level) {
 		// TODO Auto-generated constructor stub
 		this.level = level;
 		root = new PlayerTreeNode();

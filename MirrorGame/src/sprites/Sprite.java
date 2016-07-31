@@ -18,6 +18,9 @@ public class Sprite extends Object{
 	private Level level;
 	private String name;
 	
+	private double width;
+	private double height;
+	
 	//constructors with full functionality
 	public Sprite(Level level) {
 		this(level,0,0);
@@ -78,5 +81,17 @@ public class Sprite extends Object{
 		if(o == null) return false;
 		if(!(o instanceof Sprite)) return false;
 		else return this.getName().equals(((Sprite)o).getName());
+	}
+	public double getWidth() {
+		return width;
+	}
+	public void setWidth(double width) {
+		this.width = width;
+	}
+	public double getHeight() {
+		return height;
+	}
+	public void setHeight(double height) {
+		this.height = height;
 	}
 }

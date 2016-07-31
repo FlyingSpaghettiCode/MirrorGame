@@ -1,9 +1,13 @@
 package game;
 
+import java.io.IOException;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
+import levels.LevelReader;
+import levels.LevelWriter;
 import players.Player;
 import sounds.SoundPlayer;
 import javafx.scene.Scene;
@@ -65,6 +69,12 @@ public class Main extends Application
         {
             public void handle(long currentNanoTime)
             {
+            	//LevelReader bob = new LevelReader();
+            	//bob.createLevel(scene);
+            	
+            	//LevelWriter joe = new LevelWriter();
+            	//joe.writeFile(new Level(scene));
+            	
             	//time keeper
                 @SuppressWarnings("unused")
                 //btw, if you want to find the actual fps (make sure it isn't lagging)
@@ -74,7 +84,7 @@ public class Main extends Application
                 i++;
                 if(i%60 == 0)new SoundPlayer("src/sounds/midClick1.mp3").playSound(); //60 for our 60 fps
                 //System.out.println(t);//lets see the time; take out comment markers to view
-                System.out.println(i);
+                //System.out.println(i);
             	refresh();
             	draw();
             }
@@ -109,6 +119,8 @@ public class Main extends Application
         level = new Level(scene);
         Player p1 = new Player(level);
         level.addSprite(p1);
+        
+        
         
     	//write /<package>/<image.png> to get the image path
     	//testImage.setImage(new Image("/images/testImage.png"));
