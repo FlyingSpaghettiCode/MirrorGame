@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import levels.Level;
 
 /**
@@ -9,6 +11,8 @@ import levels.Level;
  */
 public class Game {
 
+	private Environment environment;
+	private ArrayList<Level> playerLevels; //levels created by the player
 	private Level[] standardLevels;
 	private Level[] menus; //levels such as the main menu, settings etcetera
 	
@@ -31,6 +35,22 @@ public class Game {
 
 	public void setMenus(Level[] menus) {
 		this.menus = menus;
+	}
+
+	public Environment getEnvironment() {
+		return environment;
+	}
+
+	public void setEnvironment(Environment environment) {
+		this.environment = environment;
+	}
+
+	public ArrayList<Level> getPlayerLevels() {
+		return playerLevels;
+	}
+
+	public void setPlayerLevels(ArrayList<Level> playerLevels) {
+		this.playerLevels = playerLevels;
 	}
 
 }

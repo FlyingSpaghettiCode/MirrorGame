@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import levels.Level;
 import players.Player;
 import sounds.SoundPlayer;
-import sprites.ControllableSprite;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
