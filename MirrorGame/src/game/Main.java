@@ -3,12 +3,14 @@ package game;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import levels.Level;
+import players.Player;
+import sounds.SoundPlayer;
 import sprites.ControllableSprite;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -43,7 +45,8 @@ public class Main extends Application
     Canvas canvas;
     GraphicsContext gc;
     Font font;
-    ControllableSprite testImage;
+    Level level;
+    double i;
     ///////////////////////////////////////////////////////////
     
     //this is a method called by launch that "starts" the game
@@ -56,14 +59,23 @@ public class Main extends Application
         
     	//seperating time from init since it doesn't fit with the rest of init functions
         final long startNanoTime = System.nanoTime();//start time
+        //double t = 0; //time
+        i = 0; //iteration
         //This is the game loop.  There are different ways of doing this, but this is the easiest.
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
             {
             	//time keeper
-                double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
+                @SuppressWarnings("unused")
+                //btw, if you want to find the actual fps (make sure it isn't lagging)
+                //divide the iteration by 60 to find what the time should be
+                //and compare that with the value of t
+				double t = (currentNanoTime - startNanoTime)/1000000000.0; 
+                i++;
+                if(i%60 == 0)new SoundPlayer("src/sounds/midClick1.mp3").playSound(); //60 for our 60 fps
                 //System.out.println(t);//lets see the time; take out comment markers to view
+                System.out.println(i);
             	refresh();
             	draw();
             }
@@ -81,6 +93,7 @@ public class Main extends Application
         scene = new Scene( root );
         
         stage.setScene( scene );
+        stage.setTitle("Mirror Game");
         
         canvas = new Canvas(WIDTH,HEIGHT);
         root.getChildren().add( canvas );
@@ -93,10 +106,13 @@ public class Main extends Application
         gc.setLineWidth(2);
         font = Font.font( "Times New Roman", FontWeight.BOLD, 48 );
         
-        //SPRITE AND INPUT
-    	testImage = new ControllableSprite(scene);
+        //SPRITE AND INPUT AND SCENE
+        level = new Level(scene);
+        Player p1 = new Player(level);
+        level.addSprite(p1);
+        
     	//write /<package>/<image.png> to get the image path
-    	testImage.setImage(new Image("/images/testImage.png"));
+    	//testImage.setImage(new Image("/images/testImage.png"));
     }
     //game loop methods
     //refreshes states of the game, can take input
@@ -108,7 +124,7 @@ public class Main extends Application
     	
         //refresh
         gc.setFont( font );
-        testImage.input();
+       	level.handle();
     }
     //all images manifest themselves on the screen
     public void draw(){
@@ -116,6 +132,6 @@ public class Main extends Application
     	gc.fillText( "DEMO", WIDTH/2-96, HEIGHT/2);
         gc.strokeText( "DEMO", WIDTH/2-96, HEIGHT/2 );
         
-    	testImage.draw(gc);
+    	level.draw(gc);
     }
 }
