@@ -1,11 +1,18 @@
 package game;
 
+import java.util.Arrays;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
+import math.Action;
+import math.Function;
 import players.Player;
+import players.PlayerTreeNode;
 import sounds.SoundPlayer;
+import sprites.ControllableSprite;
+import sprites.Wall;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -25,8 +32,8 @@ import javafx.scene.text.FontWeight;
 public class Main extends Application 
 {
 	//we will let this be mutated later on; for now this is the easy way out
-	private final int WIDTH = 800;
-	private final int HEIGHT = 450;
+	private final int WIDTH = 1920;
+	private final int HEIGHT = 1080;
 	
 	//main
     public static void main(String[] args) 
@@ -74,7 +81,7 @@ public class Main extends Application
                 i++;
                 if(i%60 == 0)new SoundPlayer("src/sounds/midClick1.mp3").playSound(); //60 for our 60 fps
                 //System.out.println(t);//lets see the time; take out comment markers to view
-                System.out.println(i);
+                //System.out.println(i);
             	refresh();
             	draw();
             }
@@ -108,7 +115,25 @@ public class Main extends Application
         //SPRITE AND INPUT AND SCENE
         level = new Level(scene);
         Player p1 = new Player(level);
-        level.addSprite(p1);
+        Player p2 = new Player(level);
+        p2.setxPosition(900);
+        p2.setyPosition(300);
+        level.addPlayer(p1);
+        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, -2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
+        
+        Player p3 = new Player(level);
+        p3.setxPosition(10);
+        p3.setyPosition(300);
+        level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
+        
+        Wall wall = new Wall();
+        wall.setxPosition(500);
+        level.addSprite(wall);
+        
+        wall = new Wall();
+        wall.setxPosition(600);
+        wall.setyPosition(500);
+        level.addSprite(wall);
         
     	//write /<package>/<image.png> to get the image path
     	//testImage.setImage(new Image("/images/testImage.png"));

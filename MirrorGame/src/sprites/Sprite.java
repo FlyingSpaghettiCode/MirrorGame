@@ -73,10 +73,16 @@ public class Sprite extends Object{
 	public void draw(GraphicsContext gc){
 		gc.drawImage(image,xPosition,yPosition);
 	}
-	@Override
-	public boolean equals(Object o){
-		if(o == null) return false;
-		if(!(o instanceof Sprite)) return false;
-		else return this.getName().equals(((Sprite)o).getName());
+	
+	public boolean isRed(){
+		return true;
+	}
+	
+	public boolean isGreen(){
+		return true;
+	}
+	
+	public boolean isBlue(){
+		return true;
 	}
 }
