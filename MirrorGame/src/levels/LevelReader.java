@@ -3,6 +3,7 @@ package levels;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Scene;
@@ -34,7 +35,6 @@ public class LevelReader {
 	}
 	//level creation methods
 	//if this returns null then you know it failed
-	@SuppressWarnings("unused")
 	public Level createLevel(Scene scene){
 		Level level;
 		List<String> lines;
@@ -45,17 +45,54 @@ public class LevelReader {
 			e.printStackTrace();
 			return null; // failure
 		}
+		if(lines.size() == 0) return null; //there is nothing there
 		//level creation code from txt
-		level = new STDLevel(scene);
 		simplify(lines);
-		
-		
+		if(!lines.get(0).contains("type")) throw new RuntimeException("specify type in level file");
+		//we analyse this seperately
+		String currentLine = lines.get(0);
+		{
+			int i;
+			for(i = currentLine.indexOf("type")+5; currentLine.substring(i, i+1) == " "; i++);
+			if(currentLine.substring(i,i+1).equals("\n")) throw new RuntimeException("specify type");
+			
+			if(i == currentLine.indexOf("standard"))level = new STDLevel(scene);
+			else level = new EmptyLevel(scene);
+		}
+		//analyse the 
+		for(int line = 1; line < lines.size(); line++){
+			currentLine = lines.get(line);
+			readLine(currentLine);
+		}
 		//return
 		return level;
+	}
+	//read one line analysing the command and such
+	private void readLine(String line){
+		//break into tokens
+		List<String> tokens = tokenize(line);
+		
+		//analyse the line
+		
+	}
+	private List<String> tokenize(String str){
+		List<String> ls = new ArrayList<String>();
+		for(int i = 0; i < str.length(); i++){
+			if(!str.substring(i,i+1).equals(" ") && !str.substring(i,i+1).equals("/n")){
+				String s = "";
+				while(!str.substring(i,i+1).equals(" ") && !str.substring(i,i+1).equals("/n")){
+					s+= str.substring(i,i+1);
+					i++;
+				}
+				ls.add(s);
+			}
+		}
+		return ls;
 	}
 	//return without any \ or && or anything like that
 	//(just break up into one command per line format for ease of parsing)
 	//won't break on null, but won't do anything
+	//it ignores empty lines and ignores caps
 	private void simplify(List<String> original){
 		if(original == null) return;
 		for(int i = original.size(); i > 0 ; i--){
@@ -75,6 +112,10 @@ public class LevelReader {
 					original.set(i, ii.substring(0, ii.indexOf("&&")));
 				}
 			}
+		}
+		for(int i = original.size()-1; i >= 0; i--){
+			original.set(i, original.get(i).toLowerCase());
+			if(original.get(i).equals("")) original.remove(i);
 		}
 	}
 	private boolean contains(List<String> ls, String s){
@@ -100,6 +141,19 @@ public class LevelReader {
 	private class STDLevel extends Level{
 
 		public STDLevel(Scene scene) {
+			super(scene);
+			// TODO Auto-generated constructor stub
+		}
+		
+	}
+	/**
+	 * Empty level does nothing, has nothing, probably only temp.
+	 * @author Adriano Hernandez
+	 *
+	 */
+	private class EmptyLevel extends Level{
+
+		public EmptyLevel(Scene scene) {
 			super(scene);
 			// TODO Auto-generated constructor stub
 		}
