@@ -17,6 +17,9 @@ public class Sprite extends Object{
 	private double yPosition;
 	private Level level;
 	private String name;
+	public boolean red = false;
+	public boolean green = false;
+	public boolean blue = false;
 	
 	//constructors with full functionality
 	public Sprite(Level level) {
@@ -75,14 +78,14 @@ public class Sprite extends Object{
 	}
 	
 	public boolean isRed(){
-		return true;
+		return red;
 	}
 	
 	public boolean isGreen(){
-		return true;
+		return green;
 	}
 	
 	public boolean isBlue(){
-		return true;
+		return blue;
 	}
 }

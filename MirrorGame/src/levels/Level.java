@@ -10,13 +10,12 @@ import math.Hitbox;
 import players.Player;
 import players.PlayerTree;
 import players.PlayerTreeNode;
-
-import com.sun.prism.paint.Color;
-
+import game.Main;
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import sprites.Collidable;
 import sprites.MoveableSprite;
 import sprites.Sprite;
@@ -29,18 +28,22 @@ import sprites.Sprite;
  */
 public class Level {
 
+	private Main main;
 	private ArrayList<Sprite> sprites;
 	private KeyboardInputHandler keyIn;
 	private MouseInputHandler mouseIn;
 	private Scene scene;
 	private PlayerTree tree;
+	private Color background;
 	
-	public Level(Scene scene) {
+	public Level(Scene scene, Main main) {
+		this.main = main;
 		this.scene = scene;
 		keyIn = new KeyboardInputHandler(scene);
 		mouseIn = new MouseInputHandler(scene);
 		sprites = new ArrayList<Sprite>();
 		tree = new PlayerTree(this);
+		background = Color.BLACK;
 	}
 
 
@@ -92,6 +95,10 @@ public class Level {
 			if(keyIn.isKeyPressed("DOWN")) velY = 10;
 			if(keyIn.isKeyPressed("LEFT")) velX = -10;
 			if(keyIn.isKeyPressed("RIGHT")) velX = 10;
+			if(keyIn.isKeyPressed("ESCAPE")){
+				System.err.println("Game terminated.");
+				System.exit(0);
+			}
 			
 			root.calcVelocityX(velX);
 			root.calcVelocityY(velY);
@@ -139,6 +146,8 @@ public class Level {
 	}
 	
 	public void draw(GraphicsContext gc){
+		gc.setFill(background);
+		gc.fillRect(0, 0, main.WIDTH, main.HEIGHT);
 		for(Sprite sprite: sprites) sprite.draw(gc);
 	}
 }

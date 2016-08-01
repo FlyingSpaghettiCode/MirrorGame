@@ -9,14 +9,13 @@ import levels.Level;
 import math.Action;
 import math.Function;
 import players.Player;
-import players.PlayerTreeNode;
 import sounds.SoundPlayer;
-import sprites.ControllableSprite;
 import sprites.Wall;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -32,8 +31,8 @@ import javafx.scene.text.FontWeight;
 public class Main extends Application 
 {
 	//we will let this be mutated later on; for now this is the easy way out
-	private final int WIDTH = 1920;
-	private final int HEIGHT = 1080;
+	public final int WIDTH = 1920;
+	public final int HEIGHT = 1080;
 	
 	//main
     public static void main(String[] args) 
@@ -113,24 +112,32 @@ public class Main extends Application
         font = Font.font( "Times New Roman", FontWeight.BOLD, 48 );
         
         //SPRITE AND INPUT AND SCENE
-        level = new Level(scene);
-        Player p1 = new Player(level);
-        Player p2 = new Player(level);
+        level = new Level(scene, this);
+        Player p1 = new Player(level, "/images/red.png");
+        p1.red = true;
+        level.addPlayer(p1);
+        
+        Player p2 = new Player(level, "/images/green.png");
+        p2.green = true;
         p2.setxPosition(900);
         p2.setyPosition(300);
-        level.addPlayer(p1);
         level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, -2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
         
-        Player p3 = new Player(level);
+        Player p3 = new Player(level, "/images/blue.png");
+        p3.blue = true;
         p3.setxPosition(10);
         p3.setyPosition(300);
         level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
         
         Wall wall = new Wall();
+        wall.red = true;
+        wall.setImage(new Image("/images/goal.png"));
         wall.setxPosition(500);
         level.addSprite(wall);
         
         wall = new Wall();
+        wall.green = true;
+        wall.setImage(new Image("/images/goal.png"));
         wall.setxPosition(600);
         wall.setyPosition(500);
         level.addSprite(wall);
