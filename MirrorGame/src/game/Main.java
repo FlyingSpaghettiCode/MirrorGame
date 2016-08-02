@@ -1,5 +1,7 @@
 package game;
 
+import images.ResizableImage;
+
 import java.util.Arrays;
 
 import javafx.animation.AnimationTimer;
@@ -51,7 +53,7 @@ public class Main extends Application
     GraphicsContext gc;
     Font font;
     Level level;
-    double i;
+    int i;
     ///////////////////////////////////////////////////////////
     
     //this is a method called by launch that "starts" the game
@@ -81,7 +83,7 @@ public class Main extends Application
                 if(i%60 == 0)new SoundPlayer("src/sounds/midClick1.mp3").playSound(); //60 for our 60 fps
                 //System.out.println(t);//lets see the time; take out comment markers to view
                 //System.out.println(i);
-            	refresh();
+            	refresh(i);
             	draw();
             }
         }.start();
@@ -121,7 +123,7 @@ public class Main extends Application
         p2.green = true;
         p2.setxPosition(900);
         p2.setyPosition(300);
-        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, -2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
+        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, 2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
         
         Player p3 = new Player(level, "/images/blue.png");
         p3.blue = true;
@@ -129,15 +131,15 @@ public class Main extends Application
         p3.setyPosition(300);
         level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
         
-        Wall wall = new Wall();
+		Wall wall = new Wall();
         wall.red = true;
-        wall.setImage(new Image("/images/goal.png"));
+        wall.setImage(new ResizableImage("/images/goal.png"));
         wall.setxPosition(500);
         level.addSprite(wall);
         
         wall = new Wall();
         wall.green = true;
-        wall.setImage(new Image("/images/goal.png"));
+        wall.setImage(new ResizableImage("/images/goal.png"));
         wall.setxPosition(600);
         wall.setyPosition(500);
         level.addSprite(wall);
@@ -147,7 +149,7 @@ public class Main extends Application
     }
     //game loop methods
     //refreshes states of the game, can take input
-    public void refresh(){
+    public void refresh(int i){
     	//take input and refresh
     	
     	//clear everything
@@ -155,7 +157,7 @@ public class Main extends Application
     	
         //refresh
         gc.setFont( font );
-       	level.handle();
+       	level.handle(i);
     }
     //all images manifest themselves on the screen
     public void draw(){

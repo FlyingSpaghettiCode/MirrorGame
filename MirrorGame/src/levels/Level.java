@@ -11,10 +11,12 @@ import players.Player;
 import players.PlayerTree;
 import players.PlayerTreeNode;
 import game.Main;
+import images.ResizableImage;
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import sprites.Collidable;
 import sprites.MoveableSprite;
@@ -35,6 +37,10 @@ public class Level {
 	private Scene scene;
 	private PlayerTree tree;
 	private Color background;
+	private double SVX = 10;
+	private double SVY = 10;
+	private double scale = 1.0;
+	private double scaleIncrement = 1.0 / 600.0;
 	
 	public Level(Scene scene, Main main) {
 		this.main = main;
@@ -83,7 +89,7 @@ public class Level {
 		this.addSprite(player);
 	}
 	
-	public void handle(){
+	public void handle(int frame){
 		PlayerTreeNode root = this.getTree().getRoot();
 		if(root != null){
 			Player player = root.getPlayer();
@@ -91,14 +97,21 @@ public class Level {
 			double velX = 0;
 			double velY = 0;
 			
-			if(keyIn.isKeyPressed("UP")) velY = -10;
-			if(keyIn.isKeyPressed("DOWN")) velY = 10;
-			if(keyIn.isKeyPressed("LEFT")) velX = -10;
-			if(keyIn.isKeyPressed("RIGHT")) velX = 10;
+			if(keyIn.isKeyPressed("UP")) velY = -1 * SVY;
+			if(keyIn.isKeyPressed("DOWN")) velY = SVY;
+			if(keyIn.isKeyPressed("LEFT")) velX = -1 * SVX;
+			if(keyIn.isKeyPressed("RIGHT")) velX = SVX;
 			if(keyIn.isKeyPressed("ESCAPE")){
 				System.err.println("Game terminated.");
 				System.exit(0);
 			}
+			if(keyIn.isKeyPressed("DIGIT1")) scale(1);
+			if(keyIn.isKeyPressed("DIGIT2")) scale(2);
+			if(keyIn.isKeyPressed("DIGIT3")) scale(3);
+			if(keyIn.isKeyPressed("DIGIT4")) scale(4);
+			if(keyIn.isKeyPressed("DIGIT5")) scale(1.2);
+			if(keyIn.isKeyPressed("DIGIT6")) scale(1.3);
+			if(keyIn.isKeyPressed("DIGIT7")) scale(1.4);
 			
 			root.calcVelocityX(velX);
 			root.calcVelocityY(velY);
@@ -139,6 +152,47 @@ public class Level {
 			root.translateY();
 		}
 		
+		this.tryRequiredScaleFactor();
+	}
+	
+	private void tryRequiredScaleFactor(){
+		double l = Double.MAX_VALUE;
+		double r = Double.MIN_VALUE;
+		double t = Double.MAX_VALUE;
+		double b = Double.MIN_VALUE;
+		
+		if(sprites.size() <= 0){
+			if(scale != 1)
+				scale(1);
+			return;
+		}
+		
+		for(Sprite sprite : sprites){
+			l = Math.min(sprite.getxPosition(), l);
+			r = Math.max(sprite.getxPosition() + sprite.getWidth(), r);
+			t = Math.min(sprite.getyPosition(), t);
+			b = Math.max(sprite.getyPosition() + sprite.getHeight(), b);
+		}
+		
+		l = 0;
+		t = 0;
+		
+		double reqWidth = r - l + 300;
+		double reqHeight = b - t + 300;
+		double reqWScale = reqWidth / ((double)main.WIDTH);
+		double reqHScale = reqHeight / ((double)main.HEIGHT);
+		
+		double reqScale =  Math.max(reqWScale, reqHScale);
+		if(reqScale == scale)
+			return;
+
+		if(reqScale < scale && scale - scaleIncrement <= 1)
+			scale(1);
+		else
+			scale(scale + Math.signum(reqScale - scale) * scaleIncrement);
+		//else if(Math.abs(reqScale - scale) < scaleIncrement)
+		//	scale(reqScale);
+		
 	}
 	
 	private boolean sameColor(Sprite one, Sprite two){
@@ -149,5 +203,19 @@ public class Level {
 		gc.setFill(background);
 		gc.fillRect(0, 0, main.WIDTH, main.HEIGHT);
 		for(Sprite sprite: sprites) sprite.draw(gc);
+	}
+	
+	public void scale(double factor){
+		for(Sprite sprite : sprites){
+			sprite.setxPosition(sprite.getxPosition() * scale / factor);
+			sprite.setyPosition(sprite.getyPosition() * scale / factor);
+			sprite.setWidth(sprite.getWidth() * scale / factor);
+			sprite.setHeight(sprite.getHeight() * scale / factor);
+		}
+		
+		this.SVX = this.SVX * scale / factor;
+		this.SVY = this.SVY * scale / factor;
+		
+		this.scale = factor;
 	}
 }
