@@ -1,15 +1,25 @@
 package sprites;
 
-public class Wall implements Collidable{
+import math.Hitbox;
+
+public class Wall extends Sprite implements Collidable{
 
 	public Wall() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void isTouching(Collidable otherSprite) {
-		// TODO Auto-generated method stub
-		
+	public Hitbox getHitbox() {
+		return new Hitbox(this.getxPosition(), this.getyPosition(), this.getImage().getActualWidth(), this.getImage().getActualHeight());
+	}
+	
+	@Override
+	public Hitbox getHitbox(double x, double y) {
+		return new Hitbox(x, y, this.getImage().getActualWidth(), this.getImage().getActualHeight());
+	}
+
+	@Override
+	public void handle(Collidable otherSprite) {
 	}
 
 }

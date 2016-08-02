@@ -1,15 +1,23 @@
 package game;
 
+import images.ResizableImage;
+
+import java.util.Arrays;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
+import math.Action;
+import math.Function;
 import players.Player;
 import sounds.SoundPlayer;
+import sprites.Wall;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -25,8 +33,8 @@ import javafx.scene.text.FontWeight;
 public class Main extends Application 
 {
 	//we will let this be mutated later on; for now this is the easy way out
-	private final int WIDTH = 800;
-	private final int HEIGHT = 450;
+	public final int WIDTH = 1920;
+	public final int HEIGHT = 1080;
 	
 	//main
     public static void main(String[] args) 
@@ -45,7 +53,7 @@ public class Main extends Application
     GraphicsContext gc;
     Font font;
     Level level;
-    double i;
+    int i;
     ///////////////////////////////////////////////////////////
     
     //this is a method called by launch that "starts" the game
@@ -74,8 +82,8 @@ public class Main extends Application
                 i++;
                 if(i%60 == 0)new SoundPlayer("src/sounds/midClick1.mp3").playSound(); //60 for our 60 fps
                 //System.out.println(t);//lets see the time; take out comment markers to view
-                System.out.println(i);
-            	refresh();
+                //System.out.println(i);
+            	refresh(i);
             	draw();
             }
         }.start();
@@ -106,16 +114,42 @@ public class Main extends Application
         font = Font.font( "Times New Roman", FontWeight.BOLD, 48 );
         
         //SPRITE AND INPUT AND SCENE
-        level = new Level(scene);
-        Player p1 = new Player(level);
-        level.addSprite(p1);
+        level = new Level(scene, this);
+        Player p1 = new Player(level, "/images/red.png");
+        p1.red = true;
+        level.addPlayer(p1);
+        
+        Player p2 = new Player(level, "/images/green.png");
+        p2.green = true;
+        p2.setxPosition(900);
+        p2.setyPosition(300);
+        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, 2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
+        
+        Player p3 = new Player(level, "/images/blue.png");
+        p3.blue = true;
+        p3.setxPosition(10);
+        p3.setyPosition(300);
+        level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
+        
+		Wall wall = new Wall();
+        wall.red = true;
+        wall.setImage(new ResizableImage("/images/goal.png"));
+        wall.setxPosition(500);
+        level.addSprite(wall);
+        
+        wall = new Wall();
+        wall.green = true;
+        wall.setImage(new ResizableImage("/images/goal.png"));
+        wall.setxPosition(600);
+        wall.setyPosition(500);
+        level.addSprite(wall);
         
     	//write /<package>/<image.png> to get the image path
     	//testImage.setImage(new Image("/images/testImage.png"));
     }
     //game loop methods
     //refreshes states of the game, can take input
-    public void refresh(){
+    public void refresh(int i){
     	//take input and refresh
     	
     	//clear everything
@@ -123,7 +157,7 @@ public class Main extends Application
     	
         //refresh
         gc.setFont( font );
-       	level.handle();
+       	level.handle(i);
     }
     //all images manifest themselves on the screen
     public void draw(){
