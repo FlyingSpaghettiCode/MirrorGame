@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import sounds.SoundPlayer;
 import sprites.Collidable;
 import sprites.MoveableSprite;
 import sprites.Sprite;
@@ -40,7 +41,13 @@ public class Level {
 	private double SVX = 10;
 	private double SVY = 10;
 	private double scale = 1.0;
-	private double scaleIncrement = 1.0 / 600.0;
+	private double scaleTime = 2; // Time to scale, in frames
+	private boolean reached = false;
+	private double xBuffer = 100; // Horizontal screen buffer, in pixels
+	private double yBuffer = 100; // Vertical screen buffer, in pixels
+	private double camX;
+	private double camY;
+	private double cameraTime = 2;
 	
 	public Level(Scene scene, Main main) {
 		this.main = main;
@@ -50,6 +57,8 @@ public class Level {
 		sprites = new ArrayList<Sprite>();
 		tree = new PlayerTree(this);
 		background = Color.BLACK;
+		camX = main.WIDTH / 2.0;
+		camY = main.HEIGHT / 2.0;
 	}
 
 
@@ -105,13 +114,6 @@ public class Level {
 				System.err.println("Game terminated.");
 				System.exit(0);
 			}
-			if(keyIn.isKeyPressed("DIGIT1")) scale(1);
-			if(keyIn.isKeyPressed("DIGIT2")) scale(2);
-			if(keyIn.isKeyPressed("DIGIT3")) scale(3);
-			if(keyIn.isKeyPressed("DIGIT4")) scale(4);
-			if(keyIn.isKeyPressed("DIGIT5")) scale(1.2);
-			if(keyIn.isKeyPressed("DIGIT6")) scale(1.3);
-			if(keyIn.isKeyPressed("DIGIT7")) scale(1.4);
 			
 			root.calcVelocityX(velX);
 			root.calcVelocityY(velY);
@@ -147,52 +149,65 @@ public class Level {
 		}
 		
 		for(Sprite sprite: sprites) sprite.handle();
-		if(root != null){
+		if(root != null && !reached){
 			root.translateX();
 			root.translateY();
 		}
 		
-		this.tryRequiredScaleFactor();
-	}
-	
-	private void tryRequiredScaleFactor(){
 		double l = Double.MAX_VALUE;
 		double r = Double.MIN_VALUE;
 		double t = Double.MAX_VALUE;
 		double b = Double.MIN_VALUE;
 		
+		l = 0; // Used only when camera is stationary
+		t = 0;
+		
 		if(sprites.size() <= 0){
 			if(scale != 1)
 				scale(1);
-			return;
+			//if(camX != main.WIDTH / 2.0 || camY != main.HEIGHT / 2.0)
+			//	setCamera(main.WIDTH / 2.0, main.HEIGHT / 2.0);
 		}
-		
-		for(Sprite sprite : sprites){
-			l = Math.min(sprite.getxPosition(), l);
-			r = Math.max(sprite.getxPosition() + sprite.getWidth(), r);
-			t = Math.min(sprite.getyPosition(), t);
-			b = Math.max(sprite.getyPosition() + sprite.getHeight(), b);
+		else {
+			for(Sprite sprite : sprites){
+				l = Math.min(sprite.getxPosition() * scale, l);
+				r = Math.max(sprite.getxPosition() * scale + sprite.getWidth() * scale, r);
+				t = Math.min(sprite.getyPosition() * scale, t);
+				b = Math.max(sprite.getyPosition() * scale + sprite.getHeight() * scale, b);
+			}
+			
+			this.tryRequiredScaleFactor(l, r, t, b);
+			
+			//this.tryRequiredCameraPosition(l, r, t, b); Doesn't work very well.
 		}
+	}
+	
+	private void tryRequiredScaleFactor(double l, double r, double t, double b){
 		
-		l = 0;
-		t = 0;
-		
-		double reqWidth = r - l + 300;
-		double reqHeight = b - t + 300;
+		double reqWidth = r - l + xBuffer * scale;
+		double reqHeight = b - t + yBuffer * scale;
 		double reqWScale = reqWidth / ((double)main.WIDTH);
 		double reqHScale = reqHeight / ((double)main.HEIGHT);
 		
 		double reqScale =  Math.max(reqWScale, reqHScale);
+		
 		if(reqScale == scale)
 			return;
 
-		if(reqScale < scale && scale - scaleIncrement <= 1)
-			scale(1);
+		if(reqScale < 1){
+			if(scale > 1)
+				scale(1);
+		}
 		else
-			scale(scale + Math.signum(reqScale - scale) * scaleIncrement);
-		//else if(Math.abs(reqScale - scale) < scaleIncrement)
-		//	scale(reqScale);
+			scale(scale + (reqScale - scale) / scaleTime);
+	}
+	
+	private void tryRequiredCameraPosition(double l, double r, double t, double b){
+		double reqX = (l + r) / 2.0;
+		double reqY = (t + b) / 2.0;
 		
+		if(camX != reqX || camY != reqY)
+			setCamera(camX + (reqX - camX) / cameraTime, camY + (reqY - camY) / cameraTime);
 	}
 	
 	private boolean sameColor(Sprite one, Sprite two){
@@ -217,5 +232,18 @@ public class Level {
 		this.SVY = this.SVY * scale / factor;
 		
 		this.scale = factor;
+	}
+	
+	public void setCamera(double x, double y){
+		double dx = x - camX;
+		double dy = y - camY;
+		
+		for(Sprite sprite : sprites){
+			sprite.setxPosition(sprite.getxPosition() - dx);
+			sprite.setyPosition(sprite.getyPosition() - dy);
+		}
+		
+		camX = x;
+		camY = y;
 	}
 }

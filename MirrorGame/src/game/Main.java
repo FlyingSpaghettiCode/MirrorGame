@@ -125,12 +125,12 @@ public class Main extends Application
         p2.setyPosition(300);
         level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, 2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
         
-        Player p3 = new Player(level, "/images/blue.png");
+        /*Player p3 = new Player(level, "/images/blue.png");
         p3.blue = true;
         p3.setxPosition(10);
         p3.setyPosition(300);
         level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
-        
+        */
 		Wall wall = new Wall();
         wall.red = true;
         wall.setImage(new ResizableImage("/images/goal.png"));
@@ -143,6 +143,8 @@ public class Main extends Application
         wall.setxPosition(600);
         wall.setyPosition(500);
         level.addSprite(wall);
+        
+		new SoundPlayer("src/sounds/racing2.mp3").playSound();
         
     	//write /<package>/<image.png> to get the image path
     	//testImage.setImage(new Image("/images/testImage.png"));
