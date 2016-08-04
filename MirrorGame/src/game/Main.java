@@ -33,8 +33,8 @@ import javafx.scene.text.FontWeight;
 public class Main extends Application 
 {
 	//we will let this be mutated later on; for now this is the easy way out
-	public final int WIDTH = 1920;
-	public final int HEIGHT = 1080;
+	public final double WIDTH = 1920;
+	public final double HEIGHT = 1080;
 	
 	//main
     public static void main(String[] args) 
@@ -131,20 +131,32 @@ public class Main extends Application
         p3.setyPosition(300);
         level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
         */
-		Wall wall = new Wall();
-        wall.red = true;
-        wall.setImage(new ResizableImage("/images/goal.png"));
-        wall.setxPosition(500);
-        level.addSprite(wall);
+		for(int i = 0; i < 5; i++){
+			Wall wall = new Wall();
+	        wall.red = true;
+	        wall.setImage(new ResizableImage("/images/goal.png"));
+	        wall.setxPosition(500);
+	        wall.setyPosition(i * 67);
+	        level.addSprite(wall);
+	        
+	        wall = new Wall();
+	        wall.green = true;
+	        wall.setImage(new ResizableImage("/images/goal.png"));
+	        wall.setxPosition(600);
+	        wall.setyPosition(500 + i * 67);
+	        level.addSprite(wall);
+		}
+		
+		for(int i = 1; i <= 20; i++){
+			Wall wall = new Wall();
+	        wall.red = true;
+	        wall.setImage(new ResizableImage("/images/goal.png"));
+	        wall.setxPosition(500 + i * 67);
+	        wall.setyPosition(268);
+	        level.addSprite(wall);
+		}
         
-        wall = new Wall();
-        wall.green = true;
-        wall.setImage(new ResizableImage("/images/goal.png"));
-        wall.setxPosition(600);
-        wall.setyPosition(500);
-        level.addSprite(wall);
-        
-		new SoundPlayer("src/sounds/racing2.mp3").playSound();
+		//new SoundPlayer("src/sounds/racing2.mp3").playSound();
         
     	//write /<package>/<image.png> to get the image path
     	//testImage.setImage(new Image("/images/testImage.png"));

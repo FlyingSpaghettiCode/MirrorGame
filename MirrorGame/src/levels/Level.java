@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import math.Camera;
 import math.Function;
 import math.Hitbox;
 import players.Player;
@@ -38,16 +39,9 @@ public class Level {
 	private Scene scene;
 	private PlayerTree tree;
 	private Color background;
-	private double SVX = 10;
-	private double SVY = 10;
-	private double scale = 1.0;
-	private double scaleTime = 2; // Time to scale, in frames
+	private double SV = 10;
 	private boolean reached = false;
-	private double xBuffer = 100; // Horizontal screen buffer, in pixels
-	private double yBuffer = 100; // Vertical screen buffer, in pixels
-	private double camX;
-	private double camY;
-	private double cameraTime = 2;
+	private Camera camera;
 	
 	public Level(Scene scene, Main main) {
 		this.main = main;
@@ -57,8 +51,8 @@ public class Level {
 		sprites = new ArrayList<Sprite>();
 		tree = new PlayerTree(this);
 		background = Color.BLACK;
-		camX = main.WIDTH / 2.0;
-		camY = main.HEIGHT / 2.0;
+		
+		camera = new Camera(this, main);
 	}
 
 
@@ -72,6 +66,8 @@ public class Level {
 	public KeyboardInputHandler getKeyIn() {return keyIn;}
 	public void setKeyIn(KeyboardInputHandler keyIn) {this.keyIn = keyIn;}
 	public PlayerTree getTree(){return tree;}
+	public double getSV(){return SV;}
+	public void setSV(double SV){this.SV = SV;}
 	
 	public void addSprite(Sprite sprite){
 		if(!sprites.contains(sprite)) sprites.add(sprite);
@@ -106,10 +102,18 @@ public class Level {
 			double velX = 0;
 			double velY = 0;
 			
-			if(keyIn.isKeyPressed("UP")) velY = -1 * SVY;
-			if(keyIn.isKeyPressed("DOWN")) velY = SVY;
-			if(keyIn.isKeyPressed("LEFT")) velX = -1 * SVX;
-			if(keyIn.isKeyPressed("RIGHT")) velX = SVX;
+			if(keyIn.isKeyPressed("UP")) velY = -1 * SV;
+			if(keyIn.isKeyPressed("DOWN")) velY = SV;
+			if(keyIn.isKeyPressed("LEFT")) velX = -1 * SV;
+			if(keyIn.isKeyPressed("RIGHT")) velX = SV;
+			
+			if(velX != 0 && velY != 0){
+				// Set the overall speed to SV
+				double mag = Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+				velX *= SV / mag;
+				velY *= SV / mag;
+			}
+			
 			if(keyIn.isKeyPressed("ESCAPE")){
 				System.err.println("Game terminated.");
 				System.exit(0);
@@ -119,95 +123,60 @@ public class Level {
 			root.calcVelocityY(velY);
 		}
 		
-		for(int i = 0; i < sprites.size(); i++){
-			Sprite sprite = sprites.get(i);
-			if(sprite instanceof Collidable){
-				for(int j = i+1; j < sprites.size(); j++){
-					Sprite otherSprite = sprites.get(j);
-					if(otherSprite instanceof Collidable && sameColor(sprite, otherSprite)){
-						Hitbox sH = ((Collidable) sprite).getHitbox();
-						boolean sM = sprite instanceof MoveableSprite;
-						if(sM)
-							sH = ((Collidable) sprite).getHitbox(sprite.getxPosition()+((MoveableSprite) sprite).getVelocityX(), sprite.getyPosition()+((MoveableSprite) sprite).getVelocityY());
-						Hitbox oH = ((Collidable) otherSprite).getHitbox();
-						boolean oM = otherSprite instanceof MoveableSprite;
-						if(oM)
-							oH = ((Collidable) otherSprite).getHitbox(otherSprite.getxPosition()+((MoveableSprite) otherSprite).getVelocityX(), otherSprite.getyPosition()+((MoveableSprite) otherSprite).getVelocityY());
-						if(sH.isColliding(oH)){
-							if(sM){
-								((MoveableSprite) sprite).setVelocityX(0);
-								((MoveableSprite) sprite).setVelocityY(0);
-							}
-							if(oM){
-								((MoveableSprite) otherSprite).setVelocityX(0);
-								((MoveableSprite) otherSprite).setVelocityY(0);
-							}
-						}
-					}
-				}
-			}
-		}
-		
 		for(Sprite sprite: sprites) sprite.handle();
 		if(root != null && !reached){
 			root.translateX();
 			root.translateY();
 		}
 		
-		double l = Double.MAX_VALUE;
-		double r = Double.MIN_VALUE;
-		double t = Double.MAX_VALUE;
-		double b = Double.MIN_VALUE;
+		this.handleCollisions();
 		
-		l = 0; // Used only when camera is stationary
-		t = 0;
+		camera.update();
 		
-		if(sprites.size() <= 0){
-			if(scale != 1)
-				scale(1);
-			//if(camX != main.WIDTH / 2.0 || camY != main.HEIGHT / 2.0)
-			//	setCamera(main.WIDTH / 2.0, main.HEIGHT / 2.0);
-		}
-		else {
-			for(Sprite sprite : sprites){
-				l = Math.min(sprite.getxPosition() * scale, l);
-				r = Math.max(sprite.getxPosition() * scale + sprite.getWidth() * scale, r);
-				t = Math.min(sprite.getyPosition() * scale, t);
-				b = Math.max(sprite.getyPosition() * scale + sprite.getHeight() * scale, b);
+	}
+	
+	private void handleCollisions(){
+		for(int i = 0; i < sprites.size(); i++){
+			
+			Sprite sprite = sprites.get(i);
+			
+			if(!(sprite instanceof Collidable))
+				continue;
+		
+			for(int j = i+1; j < sprites.size(); j++){
+				
+				Sprite otherSprite = sprites.get(j);
+				
+				if(!(otherSprite instanceof Collidable) || !sameColor(sprite, otherSprite))
+					continue;;
+				
+				double[] mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
+				System.out.println(mtv[0] +" "+ mtv[1]);
+				
+				if(mtv[0] <= 0 && mtv[1] <= 0)
+					continue;
+				
+				// Collision
+				boolean sM = sprite instanceof MoveableSprite;
+				boolean oM = otherSprite instanceof MoveableSprite;
+				
+				if(!sM && !oM)
+					continue;
+				
+				Sprite rightBottom;
+				if(mtv[0] > 0)
+					rightBottom = sprite.getxPosition() < otherSprite.getxPosition() ? otherSprite : sprite;
+				else
+					rightBottom = sprite.getyPosition() < otherSprite.getyPosition() ? otherSprite : sprite;
+				
+				Sprite target = sM ? sprite : otherSprite;
+				double mod = rightBottom.equals(target) ? 1 : -1;
+				// Handle collision
+				target.setxPosition(target.getxPosition() + mod * mtv[0]);
+				target.setyPosition(target.getyPosition() + mod * mtv[1]);
+				
 			}
-			
-			this.tryRequiredScaleFactor(l, r, t, b);
-			
-			//this.tryRequiredCameraPosition(l, r, t, b); Doesn't work very well.
 		}
-	}
-	
-	private void tryRequiredScaleFactor(double l, double r, double t, double b){
-		
-		double reqWidth = r - l + xBuffer * scale;
-		double reqHeight = b - t + yBuffer * scale;
-		double reqWScale = reqWidth / ((double)main.WIDTH);
-		double reqHScale = reqHeight / ((double)main.HEIGHT);
-		
-		double reqScale =  Math.max(reqWScale, reqHScale);
-		
-		if(reqScale == scale)
-			return;
-
-		if(reqScale < 1){
-			if(scale > 1)
-				scale(1);
-		}
-		else
-			scale(scale + (reqScale - scale) / scaleTime);
-	}
-	
-	private void tryRequiredCameraPosition(double l, double r, double t, double b){
-		double reqX = (l + r) / 2.0;
-		double reqY = (t + b) / 2.0;
-		
-		if(camX != reqX || camY != reqY)
-			setCamera(camX + (reqX - camX) / cameraTime, camY + (reqY - camY) / cameraTime);
 	}
 	
 	private boolean sameColor(Sprite one, Sprite two){
@@ -218,32 +187,5 @@ public class Level {
 		gc.setFill(background);
 		gc.fillRect(0, 0, main.WIDTH, main.HEIGHT);
 		for(Sprite sprite: sprites) sprite.draw(gc);
-	}
-	
-	public void scale(double factor){
-		for(Sprite sprite : sprites){
-			sprite.setxPosition(sprite.getxPosition() * scale / factor);
-			sprite.setyPosition(sprite.getyPosition() * scale / factor);
-			sprite.setWidth(sprite.getWidth() * scale / factor);
-			sprite.setHeight(sprite.getHeight() * scale / factor);
-		}
-		
-		this.SVX = this.SVX * scale / factor;
-		this.SVY = this.SVY * scale / factor;
-		
-		this.scale = factor;
-	}
-	
-	public void setCamera(double x, double y){
-		double dx = x - camX;
-		double dy = y - camY;
-		
-		for(Sprite sprite : sprites){
-			sprite.setxPosition(sprite.getxPosition() - dx);
-			sprite.setyPosition(sprite.getyPosition() - dy);
-		}
-		
-		camX = x;
-		camY = y;
 	}
 }
