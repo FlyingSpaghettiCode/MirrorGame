@@ -151,7 +151,6 @@ public class Level {
 					continue;;
 				
 				double[] mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
-				System.out.println(mtv[0] +" "+ mtv[1]);
 				
 				if(mtv[0] <= 0 && mtv[1] <= 0)
 					continue;

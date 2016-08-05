@@ -1,5 +1,6 @@
 package math;
 
+import players.Player;
 import levels.Level;
 import game.Main;
 import sprites.Sprite;
@@ -11,24 +12,19 @@ public class Camera {
 	private double xBuffer = 100; // Horizontal screen buffer, in pixels
 	private double yBuffer = 100; // Vertical screen buffer, in pixels
 	
-	private double camX;
-	private double camY;
-	private double cameraTime = 2;
+	private double cameraTime = 30; // Frames it takes to move the camera
 	
 	private Level level;
 	private Main main;
 	
-	
 	public Camera(Level level, Main main){
-		camX = main.WIDTH / 2.0;
-		camY = main.HEIGHT / 2.0;
 		this.level = level;
 		this.main = main;
 	}
 	
 	public void update(){
 		this.tryRequiredScaleFactor();
-		//this.tryRequiredCameraPosition();
+		this.tryRequiredCameraPosition();
 	}
 
 	
@@ -39,9 +35,6 @@ public class Camera {
 		double t = Double.MAX_VALUE;
 		double b = Double.MIN_VALUE;
 		
-		l = 0; // Used only when camera is stationary
-		t = 0;
-		
 		if(level.getSprites().size() <= 0){
 			if(scale != 1)
 				scale(1);
@@ -49,6 +42,8 @@ public class Camera {
 		}
 		
 		for(Sprite sprite : level.getSprites()){
+			if(!(sprite instanceof Player))
+				continue;
 			l = Math.min(sprite.getxPosition() * scale, l);
 			r = Math.max(sprite.getxPosition() * scale + sprite.getWidth() * scale, r);
 			t = Math.min(sprite.getyPosition() * scale, t);
@@ -80,23 +75,22 @@ public class Camera {
 		double b = Double.MIN_VALUE;
 		
 		if(level.getSprites().size() <= 0){
-			if(camX != main.WIDTH / 2.0 || camY != main.HEIGHT / 2.0)
-				this.setCamera(main.WIDTH / 2.0, main.HEIGHT / 2.0);
 			return;
 		}
 		
 		for(Sprite sprite : level.getSprites()){
-			l = Math.min(sprite.getxPosition() * scale, l);
-			r = Math.max(sprite.getxPosition() * scale + sprite.getWidth() * scale, r);
-			t = Math.min(sprite.getyPosition() * scale, t);
-			b = Math.max(sprite.getyPosition() * scale + sprite.getHeight() * scale, b);
+			if(!(sprite instanceof Player))
+				continue;
+			l = Math.min(sprite.getxPosition(), l);
+			r = Math.max(sprite.getxPosition() + sprite.getWidth(), r);
+			t = Math.min(sprite.getyPosition(), t);
+			b = Math.max(sprite.getyPosition() + sprite.getHeight(), b);
 		}
 		
-		double reqX = (l + r) / 2.0;
-		double reqY = (t + b) / 2.0;
+		double centerX = (l + r) / 2.0;
+		double centerY = (t + b) / 2.0;
 		
-		if(camX != reqX || camY != reqY)
-			setCamera(camX + (reqX - camX) / cameraTime, camY + (reqY - camY) / cameraTime);
+		this.setCamera(main.WIDTH / 2.0 + (centerX - main.WIDTH / 2.0) / cameraTime, main.HEIGHT / 2.0 + (centerY - main.HEIGHT / 2.0) / cameraTime);
 	}
 	
 	public void scale(double factor){
@@ -113,16 +107,13 @@ public class Camera {
 	}
 	
 	public void setCamera(double x, double y){
-		double dx = x - camX;
-		double dy = y - camY;
+		double dx = x - main.WIDTH / 2.0;
+		double dy = y - main.HEIGHT / 2.0;
 		
 		for(Sprite sprite : level.getSprites()){
 			sprite.setxPosition(sprite.getxPosition() - dx);
 			sprite.setyPosition(sprite.getyPosition() - dy);
 		}
-		
-		camX = x;
-		camY = y;
 	}
 	
 }
