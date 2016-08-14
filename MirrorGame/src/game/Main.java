@@ -117,7 +117,7 @@ public class Main extends Application
         
         //SPRITE AND INPUT AND SCENE
         level = new Level(scene);
-        Player p1 = new Player(level);
+        Player p1 = new Player();
         level.addSprite(p1);
         
         
