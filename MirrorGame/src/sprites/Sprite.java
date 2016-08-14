@@ -15,47 +15,33 @@ public class Sprite extends Object{
 	private Image image;
 	private double xPosition;
 	private double yPosition;
-	private Level level;
 	private String name;
 	
 	private double width;
 	private double height;
 	
 	//constructors with full functionality
-	public Sprite(Level level) {
-		this(level,0,0);
+	public Sprite() {
+		this(0,0);
 	}
-	public Sprite(Level level, double x, double y){
-		this(level, x, y, "/images/testImage.png");
+	public Sprite(double x, double y){
+		this(x, y, "/images/testImage.png");
 	}
-	public Sprite(Level level, double xPosition, double yPosition, String PATH){
+	public Sprite(double xPosition, double yPosition, String PATH){
 		//some basic init
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 		image = new Image(PATH);
-		this.level = level;	
 		setName();
 	}
-	public Sprite(Level level, String PATH){
-		this(level,0,0,PATH);
+	public Sprite(String PATH){
+		this(0,0,PATH);
 	}
-	//constructors with limited functionality: NOT RECOMMENDED
-	public Sprite(){
-		this(null);
-		//if you do not wanna take input or interact with the level this works
-		//however, if you do wanna have a working sprite give the level
-		//the level is needed for input to work and other such events
-	}
-	
-	//all getters and setters for instance variables
-	public Image getImage() {return image;}
-	public void setImage(Image image) {this.image = image;}
+
 	public double getxPosition() {return xPosition;}
 	public void setxPosition(double xPosition) {this.xPosition = xPosition;}
 	public double getyPosition() {return yPosition;}
 	public void setyPosition(double yPosition) {this.yPosition = yPosition;}
-	public Level getLevel() {return level;}
-	public void setLevel(Level level) {this.level = level;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
 	//set a pretty random name of length 10
@@ -85,13 +71,7 @@ public class Sprite extends Object{
 	public double getWidth() {
 		return width;
 	}
-	public void setWidth(double width) {
-		this.width = width;
-	}
 	public double getHeight() {
 		return height;
-	}
-	public void setHeight(double height) {
-		this.height = height;
 	}
 }
