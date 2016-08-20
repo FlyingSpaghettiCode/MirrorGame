@@ -1,10 +1,6 @@
 package sprites;
 
-import java.awt.Rectangle;
-
 import math.Hitbox;
-
-import com.sun.prism.paint.Color;
 
 /**
  * A sprite that can collide is part of this group.
@@ -13,7 +9,9 @@ import com.sun.prism.paint.Color;
  * @version 1
  */
 public interface Collidable{
-	Hitbox getHitbox();
-	Hitbox getHitbox(double x, double y);
-	void handle(Collidable otherSprite);
+	default Hitbox getHitbox(){
+		return new Hitbox(((Sprite)this).getxPosition(), ((Sprite)this).getyPosition(), ((Sprite)this).getImage().getActualWidth(), ((Sprite)this).getImage().getActualHeight());
+	}
+	
+	void handle(Collidable otherSprite, double mtv[]);
 }
