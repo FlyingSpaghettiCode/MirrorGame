@@ -13,6 +13,11 @@ public class Lever extends Sprite implements Collidable {
 		super(level);
 		this.setImage(new ResizableImage("/images/leftLever.png"));
 		
+		this.setxPosition(x);
+		this.setyPosition(y);
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
 	}
 	
 	@Override
@@ -21,7 +26,11 @@ public class Lever extends Sprite implements Collidable {
 		if(this.getLevel().getFrame() - lastToggle >= TOGGLE_INTERVAL){
 			lastToggle = this.getLevel().getFrame();
 			on = !on;
+			double h = this.getHeight();
+			double w = this.getWidth();
 			this.setImage(new ResizableImage("/images/" + (on ? "right" : "left") + "Lever.png"));
+			this.setHeight(h);
+			this.setWidth(w);
 		}
 		
 	}
