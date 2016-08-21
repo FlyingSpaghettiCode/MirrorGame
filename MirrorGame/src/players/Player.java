@@ -1,10 +1,14 @@
 package players;
 
+import java.awt.Rectangle;
+
+import levels.Level;
+import math.Hitbox;
 import sprites.Collidable;
 import sprites.MoveableSprite;
 
-//for now just a controllable sprite that knows it's a collidable
-public class Player extends MoveableSprite implements Collidable{
+//for now just a moveable sprite that knows it's a collidable
+public class Player extends MoveableSprite implements Collidable {
 
 	public Player() {
 		super();
@@ -27,8 +31,7 @@ public class Player extends MoveableSprite implements Collidable{
 	}
 
 	@Override
-	public void isTouching(Collidable otherSprite) {
-		// TODO Auto-generated method stub
+	public void handle(Collidable otherSprite, double[] mtv) {
 		
 	}
 

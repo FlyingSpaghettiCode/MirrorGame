@@ -1,5 +1,6 @@
 package sprites;
 
+import images.ResizableImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import levels.Level;
@@ -12,10 +13,13 @@ import levels.Level;
  */
 public class Sprite extends Object{
 	//instance variables
-	private Image image;
+	private ResizableImage image;
 	private double xPosition;
 	private double yPosition;
 	private String name;
+	public boolean red = false;
+	public boolean green = false;
+	public boolean blue = false;
 	
 	private double width;
 	private double height;
@@ -31,7 +35,8 @@ public class Sprite extends Object{
 		//some basic init
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		image = new Image(PATH);
+		image = new ResizableImage(PATH);
+		this.level = level;	
 		setName();
 	}
 	public Sprite(String PATH){
@@ -44,6 +49,13 @@ public class Sprite extends Object{
 	public void setyPosition(double yPosition) {this.yPosition = yPosition;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
+	
+	// Getters and setters for height and width
+	public double getHeight(){return this.getImage().getActualHeight();}
+	public double getWidth(){return this.getImage().getActualWidth();}
+	public void setHeight(double h){this.getImage().setHeight(h);}
+	public void setWidth(double w){this.getImage().setWidth(w);}
+	
 	//set a pretty random name of length 10
 	public void setName(){
 		String charList = 
@@ -60,13 +72,19 @@ public class Sprite extends Object{
 	public void handle(){}
 	//draw at it's coordinates
 	public void draw(GraphicsContext gc){
-		gc.drawImage(image,xPosition,yPosition);
+		gc.drawImage(image, xPosition, yPosition, image.getActualWidth(), image.getActualHeight());
 	}
-	@Override
-	public boolean equals(Object o){
-		if(o == null) return false;
-		if(!(o instanceof Sprite)) return false;
-		else return this.getName().equals(((Sprite)o).getName());
+	
+	public boolean isRed(){
+		return red;
+	}
+	
+	public boolean isGreen(){
+		return green;
+	}
+	
+	public boolean isBlue(){
+		return blue;
 	}
 	public double getWidth() {
 		return width;

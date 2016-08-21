@@ -1,11 +1,17 @@
 package sprites;
 
+import math.Hitbox;
+
 /**
  * A sprite that can collide is part of this group.
- * @author Adriano
- * @date 24 July 2016
- * @version 0.9
+ * @author Patrick
+ * @date 31 July 2016
+ * @version 1
  */
 public interface Collidable{
-	void isTouching(Collidable otherSprite);
+	default Hitbox getHitbox(){
+		return new Hitbox(((Sprite)this).getxPosition(), ((Sprite)this).getyPosition(), ((Sprite)this).getImage().getActualWidth(), ((Sprite)this).getImage().getActualHeight());
+	}
+	
+	void handle(Collidable otherSprite, double mtv[]);
 }

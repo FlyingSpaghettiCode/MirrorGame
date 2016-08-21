@@ -2,18 +2,26 @@ package players;
 
 import java.util.ArrayList;
 import sprites.MoveableSprite;
+import java.util.List;
+
+import math.Function;
 
 public class PlayerTreeNode {
 
 	private PlayerTreeNode parent;
 	private ArrayList<PlayerTreeNode> children;
 	private MoveableSprite player; //the player this node is associated with
+	private ArrayList<PlayerTreeNode> children = new ArrayList<PlayerTreeNode>();
+	private Player player; //the player this node is associated with
+	private ArrayList<Function> functionsX;
+	private ArrayList<Function> functionsY;
 	
-	public PlayerTreeNode() {
-		// TODO Auto-generated constructor stub
+	public PlayerTreeNode(Player player, List<Function> functionsX, List<Function> functionsY) {
+		this.player = player;
+		this.functionsX = new ArrayList<Function>(functionsX);
+		this.functionsY = new ArrayList<Function>(functionsY);
 	}
 
-	
 	//some functionality
 	public boolean isRoot(){
 		return parent == null;
@@ -52,8 +60,21 @@ public class PlayerTreeNode {
 			return false;
 	}
 	
+	public void calcVelocityX(double x){
+		for(Function function : functionsX)
+			x = function.execute(x);
+		player.setVelocityX(x);
+		for(PlayerTreeNode node : this.getChildren())
+			node.calcVelocityX(x);
+	}
 	
-	
+	public void calcVelocityY(double y){
+		for(Function function : functionsY)
+			y = function.execute(y);
+		player.setVelocityY(y);
+		for(PlayerTreeNode node : this.getChildren())
+			node.calcVelocityY(y);
+	}
 	
 	public void translateX(double x){
 		for(PlayerTreeNode i:children)	
