@@ -1,5 +1,6 @@
 package sprites;
 
+import images.ResizableImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import levels.Level;
@@ -12,14 +13,14 @@ import levels.Level;
  */
 public class Sprite extends Object{
 	//instance variables
-	private Image image;
+	private ResizableImage image;
 	private double xPosition;
 	private double yPosition;
 	private Level level;
 	private String name;
-	
-	private double width;
-	private double height;
+	public boolean red = false;
+	public boolean green = false;
+	public boolean blue = false;
 	
 	//constructors with full functionality
 	public Sprite(Level level) {
@@ -32,7 +33,7 @@ public class Sprite extends Object{
 		//some basic init
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		image = new Image(PATH);
+		image = new ResizableImage(PATH);
 		this.level = level;	
 		setName();
 	}
@@ -48,8 +49,8 @@ public class Sprite extends Object{
 	}
 	
 	//all getters and setters for instance variables
-	public Image getImage() {return image;}
-	public void setImage(Image image) {this.image = image;}
+	public ResizableImage getImage() {return image;}
+	public void setImage(ResizableImage image) {this.image = image;}
 	public double getxPosition() {return xPosition;}
 	public void setxPosition(double xPosition) {this.xPosition = xPosition;}
 	public double getyPosition() {return yPosition;}
@@ -58,6 +59,13 @@ public class Sprite extends Object{
 	public void setLevel(Level level) {this.level = level;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
+	
+	// Getters and setters for height and width
+	public double getHeight(){return this.getImage().getActualHeight();}
+	public double getWidth(){return this.getImage().getActualWidth();}
+	public void setHeight(double h){this.getImage().setHeight(h);}
+	public void setWidth(double w){this.getImage().setWidth(w);}
+	
 	//set a pretty random name of length 10
 	public void setName(){
 		String charList = 
@@ -74,24 +82,18 @@ public class Sprite extends Object{
 	public void handle(){}
 	//draw at it's coordinates
 	public void draw(GraphicsContext gc){
-		gc.drawImage(image,xPosition,yPosition);
+		gc.drawImage(image, xPosition, yPosition, image.getActualWidth(), image.getActualHeight());
 	}
-	@Override
-	public boolean equals(Object o){
-		if(o == null) return false;
-		if(!(o instanceof Sprite)) return false;
-		else return this.getName().equals(((Sprite)o).getName());
+	
+	public boolean isRed(){
+		return red;
 	}
-	public double getWidth() {
-		return width;
+	
+	public boolean isGreen(){
+		return green;
 	}
-	public void setWidth(double width) {
-		this.width = width;
-	}
-	public double getHeight() {
-		return height;
-	}
-	public void setHeight(double height) {
-		this.height = height;
+	
+	public boolean isBlue(){
+		return blue;
 	}
 }

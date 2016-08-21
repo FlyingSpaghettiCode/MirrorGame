@@ -2,9 +2,8 @@ package players;
 
 import java.util.ArrayList;
 
-import levels.Level;
-
 import input.KeyboardInputHandler;
+import levels.Level;
 
 //a player tree
 /**
@@ -20,7 +19,6 @@ public class PlayerTree {
 	public PlayerTree(Level level) {
 		// TODO Auto-generated constructor stub
 		this.level = level;
-		root = new PlayerTreeNode();
 	}
 
 	public PlayerTreeNode getRoot() {
@@ -41,6 +39,15 @@ public class PlayerTree {
 		if(!ls.contains(root)) ls.add(root);
 		for(PlayerTreeNode child: root.getChildren())
 			addNodesToArrayList(ls,child);
+	}
+	
+	public PlayerTreeNode getNode(Player player){
+		if(root.getPlayer().equals(player))
+			return root;
+		for(PlayerTreeNode node : root.getChildren())
+			if(node.getPlayer().equals(player))
+				return node;
+		return null;
 	}
 	
 	public ArrayList<Player> getPlayers(){

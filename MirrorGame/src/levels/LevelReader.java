@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.Main;
 import javafx.scene.Scene;
 
 /**
@@ -35,7 +36,7 @@ public class LevelReader {
 	}
 	//level creation methods
 	//if this returns null then you know it failed
-	public Level createLevel(Scene scene){
+	public Level createLevel(Scene scene, Main main){
 		Level level;
 		List<String> lines;
 		try {
@@ -56,8 +57,8 @@ public class LevelReader {
 			for(i = currentLine.indexOf("type")+5; currentLine.substring(i, i+1) == " "; i++);
 			if(currentLine.substring(i,i+1).equals("\n")) throw new RuntimeException("specify type");
 			
-			if(i == currentLine.indexOf("standard"))level = new STDLevel(scene);
-			else level = new EmptyLevel(scene);
+			if(i == currentLine.indexOf("standard"))level = new STDLevel(scene, main);
+			else return null;
 		}
 		//analyse the 
 		for(int line = 1; line < lines.size(); line++){
@@ -140,21 +141,8 @@ public class LevelReader {
 	 */
 	private class STDLevel extends Level{
 
-		public STDLevel(Scene scene) {
-			super(scene);
-			// TODO Auto-generated constructor stub
-		}
-		
-	}
-	/**
-	 * Empty level does nothing, has nothing, probably only temp.
-	 * @author Adriano Hernandez
-	 *
-	 */
-	private class EmptyLevel extends Level{
-
-		public EmptyLevel(Scene scene) {
-			super(scene);
+		public STDLevel(Scene scene, Main main) {
+			super(scene, main);
 			// TODO Auto-generated constructor stub
 		}
 		

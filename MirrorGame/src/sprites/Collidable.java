@@ -1,11 +1,19 @@
 package sprites;
 
+import java.awt.Rectangle;
+
+import math.Hitbox;
+
+import com.sun.prism.paint.Color;
+
 /**
  * A sprite that can collide is part of this group.
- * @author Adriano
- * @date 24 July 2016
- * @version 0.9
+ * @author Patrick
+ * @date 31 July 2016
+ * @version 1
  */
 public interface Collidable{
-	void isTouching(Collidable otherSprite);
+	Hitbox getHitbox();
+	Hitbox getHitbox(double x, double y);
+	void handle(Collidable otherSprite);
 }
