@@ -1,12 +1,13 @@
 package players;
 
 import java.util.ArrayList;
+import sprites.MoveableSprite;
 
 public class PlayerTreeNode {
 
 	private PlayerTreeNode parent;
 	private ArrayList<PlayerTreeNode> children;
-	private Player player; //the player this node is associated with
+	private MoveableSprite player; //the player this node is associated with
 	
 	public PlayerTreeNode() {
 		// TODO Auto-generated constructor stub
@@ -24,19 +25,7 @@ public class PlayerTreeNode {
 		children.remove(node);
 	}
 	
-	
-	
-	
-	
 	//getters and setters
-	public ArrayList<PlayerTreeNode> getChildren() {
-		return children;
-	}
-
-	public void setChildren(ArrayList<PlayerTreeNode> children) {
-		this.children = children;
-	}
-
 	public PlayerTreeNode getParent() {
 		return parent;
 	}
@@ -45,11 +34,11 @@ public class PlayerTreeNode {
 		this.parent = parent;
 	}
 
-	public Player getPlayer() {
+	public MoveableSprite getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer(MoveableSprite player) {
 		this.player = player;
 	}
 
@@ -66,11 +55,15 @@ public class PlayerTreeNode {
 	
 	
 	
-	public void translateX(){
-		
+	public void translateX(double x){
+		for(PlayerTreeNode i:children)	
+			i.translateX(x);
+		player.translateX(x);
 	}
-	public void translateY(){
-		
+	public void translateY(double y){
+		for(PlayerTreeNode i:children)	
+			i.translateY(y);
+		player.translateY(y);
 	}
 
 }

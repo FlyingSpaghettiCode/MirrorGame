@@ -6,8 +6,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.Scene;
-
+// Currently incomplete
+// Uses obsolete readAllLines() method
+// Subclasses don't instantiate themselves properly.
 /**
  * Parses a text document that tells how to build the level.
  * It also can write them.
@@ -16,7 +17,7 @@ import javafx.scene.Scene;
  * @author Adriano
  *
  */
-public class LevelReader {
+public class LevelReader implements LevelFactory{
 
 	//basic shit
 	private String PATH;
@@ -35,7 +36,7 @@ public class LevelReader {
 	}
 	//level creation methods
 	//if this returns null then you know it failed
-	public Level createLevel(Scene scene){
+	public Level createLevel(){
 		Level level;
 		List<String> lines;
 		try {
@@ -56,8 +57,8 @@ public class LevelReader {
 			for(i = currentLine.indexOf("type")+5; currentLine.substring(i, i+1) == " "; i++);
 			if(currentLine.substring(i,i+1).equals("\n")) throw new RuntimeException("specify type");
 			
-			if(i == currentLine.indexOf("standard"))level = new STDLevel(scene);
-			else level = new EmptyLevel(scene);
+			if(i == currentLine.indexOf("standard"))level = new STDLevel();
+			else level = new EmptyLevel();
 		}
 		//analyse the 
 		for(int line = 1; line < lines.size(); line++){
@@ -68,6 +69,7 @@ public class LevelReader {
 		return level;
 	}
 	//read one line analysing the command and such
+	//Currently does nothing.
 	private void readLine(String line){
 		//break into tokens
 		List<String> tokens = tokenize(line);
@@ -140,8 +142,8 @@ public class LevelReader {
 	 */
 	private class STDLevel extends Level{
 
-		public STDLevel(Scene scene) {
-			super(scene);
+		public STDLevel() {
+			super();
 			// TODO Auto-generated constructor stub
 		}
 		
@@ -153,8 +155,8 @@ public class LevelReader {
 	 */
 	private class EmptyLevel extends Level{
 
-		public EmptyLevel(Scene scene) {
-			super(scene);
+		public EmptyLevel() {
+			super();
 			// TODO Auto-generated constructor stub
 		}
 		
