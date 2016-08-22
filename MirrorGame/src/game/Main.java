@@ -12,6 +12,8 @@ import math.Action;
 import math.Function;
 import players.Player;
 import sounds.SoundPlayer;
+import sprites.Lever;
+import sprites.Portal;
 import sprites.Wall;
 import javafx.scene.Scene;
 import javafx.scene.Group;
@@ -115,23 +117,14 @@ public class Main extends Application
         
         //SPRITE AND INPUT AND SCENE
         level = new Level(scene, this);
-        Player p1 = new Player(level, "/images/red.png");
-        p1.red = true;
-        level.addPlayer(p1);
-        
-        Player p2 = new Player(level, "/images/green.png");
-        p2.green = true;
-        p2.setxPosition(900);
-        p2.setyPosition(300);
-        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, 2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
-        
-        /*Player p3 = new Player(level, "/images/blue.png");
-        p3.blue = true;
-        p3.setxPosition(10);
-        p3.setyPosition(300);
-        level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
-        */
-		for(int i = 0; i < 5; i++){
+
+        level.addSprite(new Lever(500 + 22 * 67, 268, true, false, false, level));
+		
+		Portal reciever = new Portal(500, 400, true, false, false, null, false);
+		level.addSprite(reciever);
+		level.addSprite(new Portal(500, -100, true, false, false, reciever, true));
+		    
+        for(int i = 0; i < 5; i++){
 			Wall wall = new Wall();
 	        wall.red = true;
 	        wall.setImage(new ResizableImage("/images/goal.png"));
@@ -155,6 +148,24 @@ public class Main extends Application
 	        wall.setyPosition(268);
 	        level.addSprite(wall);
 		}
+		
+		Player p1 = new Player(level, "/images/red.png");
+        p1.red = true;
+        level.addPlayer(p1);
+        
+        Player p2 = new Player(level, "/images/green.png");
+        p2.green = true;
+        p2.setxPosition(900);
+        p2.setyPosition(300);
+        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, 2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
+        
+        /*Player p3 = new Player(level, "/images/blue.png");
+        p3.blue = true;
+        p3.setxPosition(10);
+        p3.setyPosition(300);
+        level.addPlayer(p3, p1, Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 3)), Arrays.asList(new Function(Action.POWER, 1.1), new Function(Action.ADD, 1)));
+        */
+		
         
 		//new SoundPlayer("src/sounds/racing2.mp3").playSound();
         

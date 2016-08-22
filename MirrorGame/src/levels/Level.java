@@ -1,25 +1,20 @@
 package levels;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import math.Camera;
 import math.Function;
-import math.Hitbox;
 import players.Player;
 import players.PlayerTree;
 import players.PlayerTreeNode;
 import game.Main;
-import images.ResizableImage;
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import sounds.SoundPlayer;
 import sprites.Collidable;
 import sprites.MoveableSprite;
 import sprites.Sprite;
@@ -42,6 +37,7 @@ public class Level {
 	private double SV = 10;
 	private boolean reached = false;
 	private Camera camera;
+	private int frame;
 	
 	public Level(Scene scene, Main main) {
 		this.main = main;
@@ -68,6 +64,7 @@ public class Level {
 	public PlayerTree getTree(){return tree;}
 	public double getSV(){return SV;}
 	public void setSV(double SV){this.SV = SV;}
+	public int getFrame(){return frame;}
 	
 	public void addSprite(Sprite sprite){
 		if(!sprites.contains(sprite)) sprites.add(sprite);
@@ -95,6 +92,8 @@ public class Level {
 	}
 	
 	public void handle(int frame){
+		this.frame = frame;
+		
 		PlayerTreeNode root = this.getTree().getRoot();
 		if(root != null){
 			Player player = root.getPlayer();
@@ -169,11 +168,13 @@ public class Level {
 					rightBottom = sprite.getyPosition() < otherSprite.getyPosition() ? otherSprite : sprite;
 				
 				Sprite target = sM ? sprite : otherSprite;
-				double mod = rightBottom.equals(target) ? 1 : -1;
-				// Handle collision
-				target.setxPosition(target.getxPosition() + mod * mtv[0]);
-				target.setyPosition(target.getyPosition() + mod * mtv[1]);
 				
+				double mod = rightBottom.equals(target) ? 1 : -1;
+				
+				mtv[0] *= mod;
+				mtv[1] *= mod;
+				
+				((Collidable)(sM ? otherSprite : sprite)).handle((Collidable)target, mtv);
 			}
 		}
 	}
