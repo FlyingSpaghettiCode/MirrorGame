@@ -1,6 +1,8 @@
 package input;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -19,13 +21,29 @@ import javafx.scene.input.KeyEvent;
 public class KeyboardInputHandler {
 
 	//instance variables
-	ArrayList<String> input;
+	HashSet<String> input;
 	@SuppressWarnings("unused")
 	private Scene scene;
+	private HashMap<String, Integer> noflylist = new HashMap<String, Integer>();
 	
 	//constructors
 	public KeyboardInputHandler(Scene scene) {
 		init(scene);
+	}
+	
+	public void blockKey(String key, int ticks){
+		noflylist.put(key, ticks);
+		input.remove(key);
+	}
+	
+	public void handle(int frame){
+		for(String key : ((HashMap<String, Integer>)noflylist.clone()).keySet()){
+			int ticksLeft = noflylist.get(key);
+			if(ticksLeft > 1)
+				noflylist.put(key, ticksLeft - 1);
+			else
+				noflylist.remove(key);
+		}
 	}
 	
 	public boolean isKeyPressed(String key){
@@ -33,7 +51,7 @@ public class KeyboardInputHandler {
 	}
 	//update our current inputs in our scene
 	private void init(Scene scene){
-		input = new ArrayList<String>();
+		input = new HashSet<String>();
 	        scene.setOnKeyPressed(
 	                new EventHandler<KeyEvent>()
 	                {
@@ -42,7 +60,7 @@ public class KeyboardInputHandler {
 	                        String code = e.getCode().toString();
 	     
 	                        // only add once... prevent duplicates
-	                        if ( !input.contains(code) )
+	                        if (!noflylist.containsKey(code))
 	                            input.add( code );
 	                    }
 	                });

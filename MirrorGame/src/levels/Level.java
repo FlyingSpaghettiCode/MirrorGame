@@ -42,7 +42,7 @@ public class Level {
 	public Level(Scene scene, Main main) {
 		this.main = main;
 		this.scene = scene;
-		keyIn = new KeyboardInputHandler(scene);
+		keyIn = main.getKeyIn();
 		mouseIn = new MouseInputHandler(scene);
 		sprites = new ArrayList<Sprite>();
 		tree = new PlayerTree(this);
@@ -74,16 +74,16 @@ public class Level {
 	}
 	
 	public void addPlayer(Player player){
-		PlayerTreeNode node = new PlayerTreeNode(player, Arrays.asList(), Arrays.asList());
+		PlayerTreeNode node = new PlayerTreeNode(player, new Function());
 		node.setPlayer(player);
 		tree.setRoot(node);
 		
 		this.addSprite(player);
 	}
 	
-	public void addPlayer(Player player, Player model, List<Function> functionsX, List<Function> functionsY){
+	public void addPlayer(Player player, Player model, Function function){
 		PlayerTreeNode modelNode = tree.getNode(model);
-		PlayerTreeNode node = new PlayerTreeNode(player, functionsX, functionsY);
+		PlayerTreeNode node = new PlayerTreeNode(player, function);
 		node.setPlayer(player);
 		node.setParent(modelNode);
 		modelNode.addChild(node);
@@ -113,13 +113,7 @@ public class Level {
 				velY *= SV / mag;
 			}
 			
-			if(keyIn.isKeyPressed("ESCAPE")){
-				System.err.println("Game terminated.");
-				System.exit(0);
-			}
-			
-			root.calcVelocityX(velX);
-			root.calcVelocityY(velY);
+			root.calcVelocity(velX, velY);
 		}
 		
 		for(Sprite sprite: sprites) sprite.handle();

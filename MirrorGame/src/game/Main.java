@@ -1,6 +1,7 @@
 package game;
 
 import images.ResizableImage;
+import input.KeyboardInputHandler;
 
 import java.util.Arrays;
 
@@ -8,11 +9,11 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
-import math.Action;
 import math.Function;
 import players.Player;
 import sounds.SoundPlayer;
 import sprites.Lever;
+import sprites.Menu;
 import sprites.Portal;
 import sprites.Wall;
 import javafx.scene.Scene;
@@ -56,7 +57,15 @@ public class Main extends Application
     Font font;
     Level level;
     int i;
+	boolean paused = false;
+	KeyboardInputHandler keyIn;
+	Menu menu;
     ///////////////////////////////////////////////////////////
+    
+    
+    public boolean isPaused(){return paused;}
+    public void setPaused(boolean paused){this.paused = paused;}
+    public KeyboardInputHandler getKeyIn(){return keyIn;}
     
     //this is a method called by launch that "starts" the game
     //the gameloop is within it
@@ -100,6 +109,8 @@ public class Main extends Application
         
         root = new Group();
         scene = new Scene( root );
+        keyIn = new KeyboardInputHandler(scene);
+        menu = new Menu(this);
         
         stage.setScene( scene );
         stage.setTitle("Mirror Game");
@@ -157,7 +168,13 @@ public class Main extends Application
         p2.green = true;
         p2.setxPosition(900);
         p2.setyPosition(300);
-        level.addPlayer(p2, p1, Arrays.asList(new Function(Action.MULTIPLY, 2)), Arrays.asList(new Function(Action.MULTIPLY, 2)));
+        level.addPlayer(p2, p1, new Function(){
+        	@Override
+        	public double[] execute(double x, double y){
+        		double[] result = {x * 2, y * 2};
+        		return result;
+        	}
+        });
         
         /*Player p3 = new Player(level, "/images/blue.png");
         p3.blue = true;
@@ -182,14 +199,33 @@ public class Main extends Application
     	
         //refresh
         gc.setFont( font );
-       	level.handle(i);
+        
+        keyIn.handle(i);
+        
+       	if(!paused)
+       		level.handle(i);
+       	
+       	if(keyIn.isKeyPressed("P")){
+       		this.setPaused(!this.isPaused());
+       		keyIn.blockKey("P", 15);
+       	}
+       	else if(keyIn.isKeyPressed("ESCAPE")){
+			System.err.println("Game terminated.");
+			System.exit(0);
+		}
     }
     //all images manifest themselves on the screen
     public void draw(){
     	//draw stuff
-    	gc.fillText( "DEMO", WIDTH/2-96, HEIGHT/2);
-        gc.strokeText( "DEMO", WIDTH/2-96, HEIGHT/2 );
-        
+    	
     	level.draw(gc);
+    	
+    	if(paused){
+    		menu.draw(gc);
+
+    		gc.setFill(Color.WHITE);
+            gc.setFont(Font.font("Comic Sans", FontWeight.BOLD, 24));
+            gc.fillText("Paused", WIDTH / 2 - 24, HEIGHT / 2 - 24);
+    	}
     }
 }
