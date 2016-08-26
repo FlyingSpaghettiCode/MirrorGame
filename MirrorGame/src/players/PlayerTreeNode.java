@@ -11,8 +11,6 @@ public class PlayerTreeNode {
 	private PlayerTreeNode parent;
 	private ArrayList<PlayerTreeNode> children;
 	private MoveableSprite player; //the player this node is associated with
-	private ArrayList<PlayerTreeNode> children = new ArrayList<PlayerTreeNode>();
-	private Player player; //the player this node is associated with
 	private ArrayList<Function> functionsX;
 	private ArrayList<Function> functionsY;
 	
@@ -21,7 +19,11 @@ public class PlayerTreeNode {
 		this.functionsX = new ArrayList<Function>(functionsX);
 		this.functionsY = new ArrayList<Function>(functionsY);
 	}
-
+	public PlayerTreeNode(MoveableSprite player)
+	{
+		this.player = player;
+		children = new ArrayList<>();
+	}	
 	//some functionality
 	public boolean isRoot(){
 		return parent == null;
@@ -64,7 +66,7 @@ public class PlayerTreeNode {
 		for(Function function : functionsX)
 			x = function.execute(x);
 		player.setVelocityX(x);
-		for(PlayerTreeNode node : this.getChildren())
+		for(PlayerTreeNode node : children)
 			node.calcVelocityX(x);
 	}
 	
@@ -72,7 +74,7 @@ public class PlayerTreeNode {
 		for(Function function : functionsY)
 			y = function.execute(y);
 		player.setVelocityY(y);
-		for(PlayerTreeNode node : this.getChildren())
+		for(PlayerTreeNode node : children)
 			node.calcVelocityY(y);
 	}
 	
