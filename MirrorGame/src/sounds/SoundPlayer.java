@@ -18,8 +18,13 @@ public class SoundPlayer {
 		this.PATH = PATH;
 	}
 	public void playSound(){
-		new AudioClip(Paths.get(PATH).toUri().toString()).play();
+		playSound(PATH);
 	}
 	public String getPath() {return PATH;}
 	public void setPath(String pATH) {PATH = pATH;}
+	
+	
+	public void playSound(String PATH){
+		new AudioClip(Paths.get(PATH).toUri().toString()).play();
+	}
 }
