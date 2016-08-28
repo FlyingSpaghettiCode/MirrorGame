@@ -1,3 +1,5 @@
+package sprites;
+
 import images.ResizableImage;
 import sprites.*;
 
