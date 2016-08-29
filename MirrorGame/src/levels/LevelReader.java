@@ -17,7 +17,7 @@ import javafx.scene.Scene;
  * @author Adriano
  *
  */
-public class LevelReader {
+public class LevelReader implements LevelFactory{
 
 	//basic shit
 	private String PATH;
