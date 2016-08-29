@@ -6,7 +6,10 @@ Multiple Commands in one line - "&&"
 
 *** Definition - Keyword ***
 
-set a scene - "scene <name>"
+set a scene - "scene <name>" //THIS DOESN'T DO ANYTHING RIGHT NOW
+YOU ALSO DON'T GET TO CHOOSE YOUR MAIN
+BY DEFAULT THIS IS A STDLEVEL TYPE LEVEL, WHICH IS JUST LEVEL, EXCEPT IT ACTUALLY IS NOT ABSTRACT
+
 include text from another file - "include <file.txt>"
 
 declare a sprite - "sprite:<type> <name>: <xpos> <ypos>" + ": <additional arguments> <>"
