@@ -34,9 +34,16 @@ public class LevelReader {
 	private List<String> docText() throws IOException{
 		return Files.readAllLines(Paths.get(PATH));
 	}
+	
+	
+	
+	///////////////////////////////////////////////////
+	///////code below is old create level code/////////
+	/////////////it is almost unreadble////////////////
+	///////////////////////////////////////////////////
 	//level creation methods
 	//if this returns null then you know it failed
-	public Level createLevel(Scene scene, Main main){
+	public Level createLevel_OLD(Scene scene, Main main){
 		Level level;
 		List<String> lines;
 		try {
@@ -48,7 +55,7 @@ public class LevelReader {
 		}
 		if(lines.size() == 0) return null; //there is nothing there
 		//level creation code from txt
-		simplify(lines);
+		simplify_OLD(lines);
 		if(!lines.get(0).contains("type")) throw new RuntimeException("specify type in level file");
 		//we analyse this seperately
 		String currentLine = lines.get(0);
@@ -63,20 +70,20 @@ public class LevelReader {
 		//analyse the 
 		for(int line = 1; line < lines.size(); line++){
 			currentLine = lines.get(line);
-			readLine(currentLine);
+			readLine_OLD(currentLine);
 		}
 		//return
 		return level;
 	}
 	//read one line analysing the command and such
-	private void readLine(String line){
+	private void readLine_OLD(String line){
 		//break into tokens
-		List<String> tokens = tokenize(line);
+		List<String> tokens = tokenize_OLD(line);
 		
 		//analyse the line
 		
 	}
-	private List<String> tokenize(String str){
+	private List<String> tokenize_OLD(String str){
 		List<String> ls = new ArrayList<String>();
 		for(int i = 0; i < str.length(); i++){
 			if(!str.substring(i,i+1).equals(" ") && !str.substring(i,i+1).equals("/n")){
@@ -94,7 +101,7 @@ public class LevelReader {
 	//(just break up into one command per line format for ease of parsing)
 	//won't break on null, but won't do anything
 	//it ignores empty lines and ignores caps
-	private void simplify(List<String> original){
+	private void simplify_OLD(List<String> original){
 		if(original == null) return;
 		for(int i = original.size(); i > 0 ; i--){
 			if(original.get(i).substring(0, 1).equals("\\")){
@@ -119,11 +126,55 @@ public class LevelReader {
 			if(original.get(i).equals("")) original.remove(i);
 		}
 	}
+	
+	
+	
+	
+	
+	
+	////////////////////////////////////////////////////
+	//new iteration of level reader's factory
+	
+	
+	
+	//return true if ls contains the string s (can be a substring)
 	private boolean contains(List<String> ls, String s){
 		for(String str: ls) if(str.contains(s)) return true;
 		return false;
 	}
+	//creates a standard level < right now this is nothing
+	public Level createLevel(Scene scene, Main main){
+		return editLevel(new STDLevel(scene, main));
+	}
+	public Level editLevel(Level lvl){
+		List<String> lines = new ArrayList<String>();
+		//get the lines of text from the level file
+		try {lines = docText();} 
+		catch (IOException e) {e.printStackTrace();}
+		simplifyLines(lines);
+		for(String line: lines){
+			readLine(lvl,line);
+		}
+		return lvl;
+	}
+	//simplifies the lines into easier code for the machine to read
+	//moves includes to the front
+	//turns multi lined commands into single lines
 	
+	private void simplifyLines(List<String> ls){
+		
+	}
+	private void readLine(Level lvl, String line){
+		if(line.contains("include")){
+			//this is crude, but should be the path
+			String include_PATH = line.substring(line.indexOf("include " + 8)); //get the path
+			LevelReader alt_reader = new LevelReader(include_PATH); //read from the alt path
+			lvl = alt_reader.editLevel(lvl); //edit the level 
+			return;
+		}
+	}
+	
+	/////////////////////////////////////////////////////
 	//getters
 	public String getPATH() {
 		return PATH;
