@@ -7,14 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.Main;
+import sprites.Sprite;
 import javafx.scene.Scene;
+import sounds.SoundPlayer;
 
 /**
  * Parses a text document that tells how to build the level.
  * It also can write them.
  * 
- * This is basicallly a factory class
+ * This is basicallly a factory class that reads from a txt file.
+ * The language is interpreted as a list of additions to the class that are analysed by line
+ * sequentially.  More syntax information is on another dock in this folder labelled "SynaxInformation"
  * @author Adriano
+ * @version 0.3
+ * @date 5 September 2016
  *
  */
 public class LevelReader implements LevelFactory{
@@ -42,6 +48,8 @@ public class LevelReader implements LevelFactory{
 	///////////////////////////////////////////////////
 	///////code below is old create level code/////////
 	/////////////it is almost unreadble////////////////
+	 * 
+	 * THIS IS DEPRECATED
 	///////////////////////////////////////////////////
 	//level creation methods
 	//if this returns null then you know it failed
@@ -156,7 +164,10 @@ public class LevelReader implements LevelFactory{
 		catch (IOException e) {e.printStackTrace();}
 		simplifyLines(lines);
 		for(String line: lines){
-			readLine(lvl,line);
+			if(line.indexOf("\n") != -1){	//to avoid confusing paths and the like
+				readLine(lvl,line.substring(0,line.indexOf("\n")));
+			}
+			else readLine(lvl,line);
 		}
 		return lvl;
 	}
@@ -166,7 +177,25 @@ public class LevelReader implements LevelFactory{
 	
 	private void simplifyLines(List<String> ls){
 		for(int i = ls.size()-1; i >= 0; i--){
-			ls.set(i, ls.get(i).substring(0, ls.get(i).indexOf("#")));
+			//REMOVE COMMENTS
+			if(ls.contains("#"))
+				ls.set(i, ls.get(i).substring(0, ls.get(i).indexOf("#")));// take out comments
+			//REMOVE MULTI LINED STATEMENTS
+			if(i > 0 && ls.get(i).substring(0, 1).equals("\\")){
+				ls.set(i-1, ls.get(i-1) + ls.get(i));
+				ls.remove(i);
+			}
+			//REMOVE DUAL STATEMENTS
+			if(ls.get(i).contains("&&")){
+				String nl = ls.get(i).substring(ls.get(i).indexOf("&&")+2);
+				ls.set(i, ls.get(i).substring(0, ls.get(i).indexOf("&&")));
+				ls.add(i,nl);
+			}
+			
+			
+			//REMOVE EMPTY LINES
+			if(ls.get(i).length() < 1)
+				ls.remove(i);
 		}
 	}
 	private void readLine(Level lvl, String line){
@@ -177,11 +206,19 @@ public class LevelReader implements LevelFactory{
 			lvl = alt_reader.editLevel(lvl); //edit the level 
 			return;
 		}
+		else if(line.contains("sprite")){
+			Sprite sp = new Sprite();
+			lvl.addSprite(sp);
+		}
 		else if(line.contains("playertree")){
 			
 		}
-		else if(){
-			
+		else if(line.contains("sound")){
+			lvl.getSounds().add(new SoundPlayer(
+					line.substring(line.indexOf("sound ")+6)));
+		}
+		else{
+			return;
 		}
 	}
 	

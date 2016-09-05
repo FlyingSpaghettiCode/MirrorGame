@@ -17,7 +17,7 @@ declare a sprite - "sprite:<type> <name>: <xpos> <ypos>" + ": <additional argume
 	Can collide - "-cc"
 	Color <code> - "-c=<code>"
 	
-declare a player tree - "player tree <name>" + ":<additional arguments>"
+declare a player tree - "playertree <name>" + ":<additional arguments>"
 
-declare one or more sounds - "sound (<name> at <path>:<additional arguments>)" + "(<> at <>:<>)"
+declare one or more sounds - "sound <PATH>" WE WILL CHANGE THIS TO SOMETHING BETTER LATER
 
