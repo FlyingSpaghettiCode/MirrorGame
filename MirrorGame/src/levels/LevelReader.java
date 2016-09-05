@@ -21,6 +21,8 @@ public class LevelReader implements LevelFactory{
 
 	//basic shit
 	private String PATH;
+	private Scene scene;
+	private Main main;
 	//PATH CAN GO ANYWHERE ON COMP
 	public LevelReader(String PATH) {
 		this.PATH = PATH;
@@ -36,7 +38,7 @@ public class LevelReader implements LevelFactory{
 	}
 	
 	
-	
+	/*
 	///////////////////////////////////////////////////
 	///////code below is old create level code/////////
 	/////////////it is almost unreadble////////////////
@@ -128,12 +130,13 @@ public class LevelReader implements LevelFactory{
 	}
 	
 	
-	
+	*/
 	
 	
 	
 	////////////////////////////////////////////////////
 	//new iteration of level reader's factory
+	//this is FRAGILE
 	
 	
 	
@@ -143,7 +146,7 @@ public class LevelReader implements LevelFactory{
 		return false;
 	}
 	//creates a standard level < right now this is nothing
-	public Level createLevel(Scene scene, Main main){
+	public Level createLevel(){
 		return editLevel(new STDLevel(scene, main));
 	}
 	public Level editLevel(Level lvl){
@@ -162,7 +165,9 @@ public class LevelReader implements LevelFactory{
 	//turns multi lined commands into single lines
 	
 	private void simplifyLines(List<String> ls){
-		
+		for(int i = ls.size()-1; i >= 0; i--){
+			ls.set(i, ls.get(i).substring(0, ls.get(i).indexOf("#")));
+		}
 	}
 	private void readLine(Level lvl, String line){
 		if(line.contains("include")){
@@ -171,6 +176,12 @@ public class LevelReader implements LevelFactory{
 			LevelReader alt_reader = new LevelReader(include_PATH); //read from the alt path
 			lvl = alt_reader.editLevel(lvl); //edit the level 
 			return;
+		}
+		else if(line.contains("playertree")){
+			
+		}
+		else if(){
+			
 		}
 	}
 	
@@ -184,6 +195,22 @@ public class LevelReader implements LevelFactory{
 	}
 
 	
+	public Scene getScene() {
+		return scene;
+	}
+	public void setScene(Scene scene) {
+		this.scene = scene;
+	}
+
+
+	public Main getMain() {
+		return main;
+	}
+	public void setMain(Main main) {
+		this.main = main;
+	}
+
+
 	/**
 	 * This is a standard level.  We can write other implementations of our
 	 * abstract level somewhere else.
