@@ -9,6 +9,7 @@ import math.Function;
 import players.Player;
 import players.PlayerTree;
 import players.PlayerTreeNode;
+import sounds.SoundPlayer;
 import game.Main;
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
@@ -37,7 +38,7 @@ public class Level {
 	private double SV = 10;
 	private boolean reached = false;
 	private Camera camera;
-	private int frame;
+	private List<SoundPlayer> sounds;
 	
 	public Level(Scene scene, Main main) {
 		this.main = main;
@@ -64,7 +65,6 @@ public class Level {
 	public PlayerTree getTree(){return tree;}
 	public double getSV(){return SV;}
 	public void setSV(double SV){this.SV = SV;}
-	public int getFrame(){return frame;}
 	
 	public void addSprite(Sprite sprite){
 		if(!sprites.contains(sprite)) sprites.add(sprite);
@@ -92,8 +92,6 @@ public class Level {
 	}
 	
 	public void handle(int frame){
-		this.frame = frame;
-		
 		PlayerTreeNode root = this.getTree().getRoot();
 		if(root != null){
 			Player player = root.getPlayer();
@@ -168,13 +166,11 @@ public class Level {
 					rightBottom = sprite.getyPosition() < otherSprite.getyPosition() ? otherSprite : sprite;
 				
 				Sprite target = sM ? sprite : otherSprite;
-				
 				double mod = rightBottom.equals(target) ? 1 : -1;
+				// Handle collision
+				target.setxPosition(target.getxPosition() + mod * mtv[0]);
+				target.setyPosition(target.getyPosition() + mod * mtv[1]);
 				
-				mtv[0] *= mod;
-				mtv[1] *= mod;
-				
-				((Collidable)(sM ? otherSprite : sprite)).handle((Collidable)target, mtv);
 			}
 		}
 	}
@@ -187,5 +183,15 @@ public class Level {
 		gc.setFill(background);
 		gc.fillRect(0, 0, main.WIDTH, main.HEIGHT);
 		for(Sprite sprite: sprites) sprite.draw(gc);
+	}
+
+
+	public List<SoundPlayer> getSounds() {
+		return sounds;
+	}
+
+
+	public void setSounds(List<SoundPlayer> sounds) {
+		this.sounds = sounds;
 	}
 }
