@@ -1,3 +1,18 @@
 # MirrorGame
 
-Adriano is revamping the code, wait till the new version is ready to edit.  Use Slack to Communicate.
+player -> playertree & put functions within
+
+
+comment out code
+
+
+clean up organization
+
+
+finish level reader & writer
+
+
+add new features & clean up old ones
+
+
+optimize
