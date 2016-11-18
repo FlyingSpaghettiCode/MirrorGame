@@ -1,5 +1,7 @@
 # MirrorGame
 
+To Do:
+
 player -> playertree & put functions within
 
 
@@ -16,3 +18,7 @@ add new features & clean up old ones
 
 
 optimize
+
+
+Work on design choices :
+    etc...
