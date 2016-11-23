@@ -19,7 +19,7 @@ import javafx.scene.input.KeyEvent;
 public class KeyboardInputHandler {
 
 	//instance variables
-	ArrayList<String> input;
+	ArrayList<String> input = new ArrayList<String>();
 	@SuppressWarnings("unused")
 	private Scene scene;
 	
@@ -33,7 +33,6 @@ public class KeyboardInputHandler {
 	}
 	//update our current inputs in our scene
 	private void init(Scene scene){
-		input = new ArrayList<String>();
 	        scene.setOnKeyPressed(
 	                new EventHandler<KeyEvent>()
 	                {

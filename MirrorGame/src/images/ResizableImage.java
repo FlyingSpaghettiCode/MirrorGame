@@ -2,6 +2,7 @@ package images;
 
 import javafx.scene.image.Image;
 
+//this class actually does nothing though........
 public class ResizableImage extends Image {
 	
 	double height;
