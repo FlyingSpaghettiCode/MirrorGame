@@ -6,8 +6,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.Main;
+import game.Game;
+import sprites.Lever;
+import sprites.Portal;
 import sprites.Sprite;
+import sprites.Wall;
 import javafx.scene.Scene;
 import sounds.SoundPlayer;
 
@@ -28,7 +31,7 @@ public class LevelReader implements LevelFactory{
 	//basic shit
 	private String PATH;
 	private Scene scene;
-	private Main main;
+	private Game main;
 	//PATH CAN GO ANYWHERE ON COMP
 	public LevelReader(String PATH) {
 		this.PATH = PATH;
@@ -43,119 +46,14 @@ public class LevelReader implements LevelFactory{
 		return Files.readAllLines(Paths.get(PATH));
 	}
 	
-	
-	/*
-	///////////////////////////////////////////////////
-	///////code below is old create level code/////////
-	/////////////it is almost unreadble////////////////
-	 * 
-	 * THIS IS DEPRECATED
-	///////////////////////////////////////////////////
-	//level creation methods
-	//if this returns null then you know it failed
-	public Level createLevel_OLD(Scene scene, Main main){
-		Level level;
-		List<String> lines;
-		try {
-			lines = docText();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null; // failure
-		}
-		if(lines.size() == 0) return null; //there is nothing there
-		//level creation code from txt
-		simplify_OLD(lines);
-		if(!lines.get(0).contains("type")) throw new RuntimeException("specify type in level file");
-		//we analyse this seperately
-		String currentLine = lines.get(0);
-		{
-			int i;
-			for(i = currentLine.indexOf("type")+5; currentLine.substring(i, i+1) == " "; i++);
-			if(currentLine.substring(i,i+1).equals("\n")) throw new RuntimeException("specify type");
-			
-			if(i == currentLine.indexOf("standard"))level = new STDLevel(scene, main);
-			else return null;
-		}
-		//analyse the 
-		for(int line = 1; line < lines.size(); line++){
-			currentLine = lines.get(line);
-			readLine_OLD(currentLine);
-		}
-		//return
-		return level;
-	}
-	//read one line analysing the command and such
-	private void readLine_OLD(String line){
-		//break into tokens
-		List<String> tokens = tokenize_OLD(line);
-		
-		//analyse the line
-		
-	}
-	private List<String> tokenize_OLD(String str){
-		List<String> ls = new ArrayList<String>();
-		for(int i = 0; i < str.length(); i++){
-			if(!str.substring(i,i+1).equals(" ") && !str.substring(i,i+1).equals("/n")){
-				String s = "";
-				while(!str.substring(i,i+1).equals(" ") && !str.substring(i,i+1).equals("/n")){
-					s+= str.substring(i,i+1);
-					i++;
-				}
-				ls.add(s);
-			}
-		}
-		return ls;
-	}
-	//return without any \ or && or anything like that
-	//(just break up into one command per line format for ease of parsing)
-	//won't break on null, but won't do anything
-	//it ignores empty lines and ignores caps
-	private void simplify_OLD(List<String> original){
-		if(original == null) return;
-		for(int i = original.size(); i > 0 ; i--){
-			if(original.get(i).substring(0, 1).equals("\\")){
-				original.set(i-1, original.get(i-1) + 
-						original.get(i).substring(1));
-				original.remove(i);
-			}
-		}
-		int firstAnd = 0;
-		while(contains(original,"&&")){
-			for(int i = firstAnd; i < original.size(); i++){
-				String ii = original.get(i);
-				int index = ii.indexOf("&&");
-				if(index != -1){
-					original.add(ii.substring(ii.indexOf("&&")+2));
-					original.set(i, ii.substring(0, ii.indexOf("&&")));
-				}
-			}
-		}
-		for(int i = original.size()-1; i >= 0; i--){
-			original.set(i, original.get(i).toLowerCase());
-			if(original.get(i).equals("")) original.remove(i);
-		}
-	}
-	
-	
-	*/
-	
-	
-	
-	////////////////////////////////////////////////////
-	//new iteration of level reader's factory
-	//this is FRAGILE
-	
-	
-	
 	//return true if ls contains the string s (can be a substring)
 	private boolean contains(List<String> ls, String s){
 		for(String str: ls) if(str.contains(s)) return true;
 		return false;
 	}
-	//creates a standard level < right now this is nothing
+	//creates a standard level
 	public Level createLevel(){
-		return editLevel(new STDLevel(scene, main));
+		return editLevel(new StandardLevel(scene, main));
 	}
 	public Level editLevel(Level lvl){
 		List<String> lines = new ArrayList<String>();
@@ -198,6 +96,8 @@ public class LevelReader implements LevelFactory{
 				ls.remove(i);
 		}
 	}
+	
+	//will read a line and analyze it (this is a line by line script)
 	private void readLine(Level lvl, String line){
 		if(line.contains("include")){
 			//this is crude, but should be the path
@@ -206,16 +106,36 @@ public class LevelReader implements LevelFactory{
 			lvl = alt_reader.editLevel(lvl); //edit the level 
 			return;
 		}
-		else if(line.contains("sprite")){
-			Sprite sp = new Sprite();
-			lvl.addSprite(sp);
-		}
-		else if(line.contains("playertree")){
+		else if(line.contains("add")){
 			
-		}
-		else if(line.contains("sound")){
-			lvl.getSounds().add(new SoundPlayer(
-					line.substring(line.indexOf("sound ")+6)));
+			if(line.contains("sprite")){
+				Sprite sp = new Sprite();
+				lvl.addSprite(sp);
+			}
+			if(line.contains("wall")){
+				Wall w = new Wall();
+				
+			}
+			if(line.contains("portal")){
+				String data = line.substring(line.indexOf("portal")+6);
+				
+				//Portal p = new Portal(0, 0, false, false, false, p, false);
+				
+			}
+			if(line.contains("lever")){
+				String data = line.substring(line.indexOf("lever")+5);
+				//Lever lv = new Lever(0, 0, false, false, false, lvl);
+			}
+			else if(line.contains("playertree")){
+				
+			}
+			if(line.contains("button")){
+				
+			}
+			else if(line.contains("sound")){
+				lvl.getSounds().add(new SoundPlayer(
+						line.substring(line.indexOf("sound ")+6)));
+			}
 		}
 		else{
 			return;
@@ -240,10 +160,10 @@ public class LevelReader implements LevelFactory{
 	}
 
 
-	public Main getMain() {
+	public Game getMain() {
 		return main;
 	}
-	public void setMain(Main main) {
+	public void setMain(Game main) {
 		this.main = main;
 	}
 
@@ -254,12 +174,11 @@ public class LevelReader implements LevelFactory{
 	 * @author Adriano Hernandez
 	 *
 	 */
-	private class STDLevel extends Level{
+	private class StandardLevel extends Level{
 
-		public STDLevel(Scene scene, Main main) {
+		public StandardLevel(Scene scene, Game main) {
 			super(scene, main);
-			// TODO Auto-generated constructor stub
 		}
-		
+
 	}
 }
