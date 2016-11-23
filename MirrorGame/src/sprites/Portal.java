@@ -4,12 +4,10 @@ import images.ResizableImage;
 
 public class Portal extends Sprite implements Collidable {
 
-	boolean sender;
 	Portal other;
 	
-	public Portal(double x, double y, boolean red, boolean green, boolean blue, Portal other, boolean sender){
+	public Portal(double x, double y, boolean red, boolean green, boolean blue){
 		this.other = other;
-		this.sender = sender;
 		this.setxPosition(x);
 		this.setyPosition(y);
 		this.red = red;
@@ -19,14 +17,30 @@ public class Portal extends Sprite implements Collidable {
 		this.setImage(new ResizableImage("/images/portal.png"));
 	}
 	
+	public void setExit(Portal exit){
+		other = exit;
+		exit.other = this;
+	}
+	
 	@Override
 	public void handle(Collidable otherSprite, double[] mtv) {
+		Sprite s = (Sprite) otherSprite;
 		
-		if(sender){
-			((Sprite)otherSprite).setxPosition(other.getxPosition());
-			((Sprite)otherSprite).setyPosition(other.getyPosition());
+		s.setxPosition(s.getxPosition() + mtv[0]);
+		s.setyPosition(s.getyPosition() + mtv[1]);
+		
+		double dx = s.getxPosition() + s.getWidth()/2.0 - this.getxPosition() - this.getWidth()/2.0;
+		double dy = s.getyPosition() + s.getHeight()/2.0 - this.getyPosition() - this.getHeight()/2.0;
+		
+		if(mtv[0] != 0){
+			//s.setxPosition(other.getxPosition() + other.getWidth()/2.0 - dx);
+			s.setxPosition(other.getxPosition() + Math.signum(dx) * -1 * s.getWidth());
+			s.setyPosition(other.getyPosition() + other.getHeight()/2.0 + dy - s.getHeight()/2.0);
 		}
-		
+		else if(mtv[1] != 0){
+			s.setxPosition(other.getxPosition() + other.getWidth()/2.0 + dx - s.getWidth()/2.0);
+			s.setyPosition(other.getyPosition() + Math.signum(dy) * -1 * s.getHeight());
+		}
 	}
 
 }

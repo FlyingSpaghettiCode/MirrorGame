@@ -1,9 +1,18 @@
 package sprites;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import images.ResizableImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
 import levels.Level;
+
+import javafx.scene.image.WritableImage;
 
 /**
  * A bear bones sprite class; it can display at given coordinates and display an image.
@@ -34,6 +43,18 @@ public class Sprite extends Object{
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 		image = new ResizableImage(PATH);
+
+		/*try {
+			BufferedImage bi = ImageIO.read(new File(PATH));
+			
+			image = new ResizableImage(bi.getWidth(), bi.getHeight());
+			PixelWriter pw = image.getPixelWriter();
+			for(int x = 0; x < bi.getWidth(); x++)
+				for(int y = 0; y < bi.getHeight(); y++)
+					pw.setArgb(x, y, bi.getRGB(x, y));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
 		this.level = level;	
 		setName();
 	}

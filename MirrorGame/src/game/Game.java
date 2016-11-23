@@ -2,6 +2,9 @@ package game;
 
 import images.ResizableImage;
 
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Toolkit;
 import java.util.Arrays;
 
 import javafx.animation.AnimationTimer;
@@ -9,6 +12,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
 import levels.LevelReader;
+import math.Camera;
 import math.Function;
 import players.Player;
 import sounds.SoundPlayer;
@@ -35,9 +39,9 @@ import input.KeyboardInputHandler;
 
 // THIS IS RUNNING A DEMO APPLICATION RIGHT NOW
 public class Game extends Application {
-	// we will let this be mutated later on; for now this is the easy way out
-	public final double WIDTH = 1920;
-	public final double HEIGHT = 1080;
+	
+	public double WIDTH = 1920;
+	public double HEIGHT = 1080;
 
 	// main
 	public static void main(String[] args) {
@@ -62,6 +66,7 @@ public class Game extends Application {
 	boolean paused = false;
 	KeyboardInputHandler keyIn;
 	Menu menu;
+	Camera camera;
 	///////////////////////////////////////////////////////////
 
 	public boolean isPaused() {
@@ -120,7 +125,11 @@ public class Game extends Application {
 	// initialization for the game's current state
 	public void init(Stage stage) {
 		// init is here for now
-
+		
+		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+		WIDTH = size.getWidth();
+		HEIGHT = size.getHeight();
+		
 		stage.setTitle("Canvas Example");
 
 		root = new Group();
@@ -131,7 +140,8 @@ public class Game extends Application {
 
 		stage.setScene(scene);
 		stage.setTitle("Mirror Game");
-
+		stage.setFullScreen(true);
+		
 		canvas = new Canvas(WIDTH, HEIGHT);
 		root.getChildren().add(canvas);
 
@@ -146,11 +156,11 @@ public class Game extends Application {
 		// SPRITE AND INPUT AND SCENE
 		level = new Level(scene, this);
 
-		level.addSprite(new Lever(500 + 22 * 67, 268, true, false, false, level));
-
-		Portal reciever = new Portal(500, 400, true, false, false, null, false);
-		level.addSprite(reciever);
-		level.addSprite(new Portal(500, -100, true, false, false, reciever, true));
+		Portal po1 = new Portal(500, 400, true, false, false);
+		Portal po2 = new Portal(500, -100, true, false, false);
+		po1.setExit(po2);
+		level.addSprite(po1);
+		level.addSprite(po2);
 
 		for (int i = 0; i < 5; i++) {
 			Wall wall = new Wall();
@@ -176,6 +186,8 @@ public class Game extends Application {
 			wall.setyPosition(268);
 			level.addSprite(wall);
 		}
+		
+		level.addSprite(new Lever(500 + 22 * 67, 268, true, false, false, level, level.getSprites().indexOf(po1), "sprites.Sprite", "green", true, false));
 
 		Player p1 = new Player(level, "/images/red.png");
 		p1.red = true;
@@ -192,7 +204,10 @@ public class Game extends Application {
 				return result;
 			}
 		});
+		
+camera = new Camera(level, this);
 
+		
 	}
 
 	// game loop methods
@@ -208,8 +223,10 @@ public class Game extends Application {
 
 		keyIn.handle(i);
 
-		if (!paused)
+		if (!paused){
 			level.handle(i);
+			camera.update();
+		}
 
 		if (keyIn.isKeyPressed("P")) {
 			this.setPaused(!this.isPaused());
@@ -225,12 +242,13 @@ public class Game extends Application {
 	public void draw() {
 		// draw stuff
 		level.draw(gc);
-
+		
 		if (paused) {
 			menu.draw(gc);
 			gc.setFill(Color.WHITE);
-			gc.setFont(Font.font("Comic Sans", FontWeight.BOLD, 24));
-			gc.fillText("Paused", WIDTH / 2 - 24, HEIGHT / 2 - 24);
+			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+			FontMetrics metrics = (new java.awt.Canvas()).getFontMetrics(new java.awt.Font("Verdana",java.awt.Font.BOLD, 24));
+			gc.fillText("Paused", WIDTH / 2 - metrics.stringWidth("Paused")/2.0, HEIGHT / 2 - metrics.getAscent()/2.0);
 		}
 	}
 }

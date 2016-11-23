@@ -38,9 +38,9 @@ public class Hitbox {
 		
 		if(xOverlap > 0 && yOverlap > 0){
 			if(xOverlap < yOverlap)
-				mtv[0] = xOverlap;
+				mtv[0] = xOverlap * ((this.r + this.l) > (other.r + other.l) ? 1 : -1);
 			else
-				mtv[1] = yOverlap;
+				mtv[1] = yOverlap * ((this.b + this.t) > (other.b + other.t) ? 1 : -1);
 		}
 		
 		return mtv;

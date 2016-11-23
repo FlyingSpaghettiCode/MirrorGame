@@ -125,6 +125,7 @@ public class Level {
 	}
 	
 	private void handleCollisions(){
+		
 		for(int i = 0; i < sprites.size(); i++){
 			
 			Sprite sprite = sprites.get(i);
@@ -137,15 +138,27 @@ public class Level {
 				Sprite otherSprite = sprites.get(j);
 				
 				if(!(otherSprite instanceof Collidable) || !sameColor(sprite, otherSprite))
-					continue;;
-				
-				double[] mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
-				
-				if(mtv[0] <= 0 && mtv[1] <= 0)
 					continue;
 				
-				// Collision
 				boolean sM = sprite instanceof MoveableSprite;
+				boolean oM = otherSprite instanceof MoveableSprite;
+				if(!sM && !oM)
+					continue;
+				
+				double[] mtv;
+				if(sM)
+					mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
+				else
+					mtv = ((Collidable) otherSprite).getHitbox().getMTV(((Collidable) sprite).getHitbox());
+				
+				//System.out.println(mtv[0] + " " + mtv[1]);
+				
+				if(mtv[0] == 0 && mtv[1] == 0)
+					continue;
+				
+				
+				// Collision
+				/*boolean sM = sprite instanceof MoveableSprite;
 				boolean oM = otherSprite instanceof MoveableSprite;
 				
 				if(!sM && !oM)
@@ -161,10 +174,16 @@ public class Level {
 				double mod = rightBottom.equals(target) ? 1 : -1;
 				// Handle collision
 				target.setxPosition(target.getxPosition() + mod * mtv[0]);
-				target.setyPosition(target.getyPosition() + mod * mtv[1]);
+				target.setyPosition(target.getyPosition() + mod * mtv[1]);*/
 				
+				((Collidable) sprite).handle((Collidable) otherSprite, mtv);
+				((Collidable) otherSprite).handle((Collidable) otherSprite, mtv);
 			}
 		}
+	}
+	
+	public Sprite getSprite(int id){ // TODO implement
+		return sprites.get(id);
 	}
 	
 	private boolean sameColor(Sprite one, Sprite two){
