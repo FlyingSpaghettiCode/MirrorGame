@@ -1,5 +1,16 @@
 #Level 1 generation file
 
+# 2 walls, one is red and one is green
+# 3 players stacked on each other as white, one is red, one is green, one is blue
+# one moves x, one 2x, one 3x to pass each of the walls, each moves same y
+# 1 endzone per side of each wall
+# player filters players through each wall, then down into endzone
+
+#authors: Edgar
+
+#good level for intro since it introduces topic and shows important starting mechanics
+
 add playertree
 add wall
+add button
 add sprite
