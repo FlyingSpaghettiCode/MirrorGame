@@ -37,11 +37,12 @@ public class Level {
 	private double SV = 10;
 	private boolean reached = false;
 	private List<SoundPlayer> sounds;
+	private int frame;
 	
 	public Level(Scene scene, Game main) {
 		this.main = main;
 		this.scene = scene;
-		keyIn = new KeyboardInputHandler(scene);
+		keyIn = main.getKeyIn();
 		mouseIn = new MouseInputHandler(scene);
 		sprites = new ArrayList<Sprite>();
 		tree = new PlayerTree(this);
@@ -51,6 +52,7 @@ public class Level {
 
 
 	//getters and setters
+	public int getFrame(){return frame;}
 	public ArrayList<Sprite> getSprites() {return sprites;}
 	public void setSprites(ArrayList<Sprite> sprites) {this.sprites = sprites;}
 	public Scene getScene() {return scene;}
@@ -71,16 +73,16 @@ public class Level {
 	}
 	
 	public void addPlayer(Player player){
-		PlayerTreeNode node = new PlayerTreeNode(player, Arrays.asList(), Arrays.asList());
+		PlayerTreeNode node = new PlayerTreeNode(player, new Function());
 		node.setPlayer(player);
 		tree.setRoot(node);
 		
 		this.addSprite(player);
 	}
 	
-	public void addPlayer(Player player, Player model, List<Function> functionsX, List<Function> functionsY){
+	public void addPlayer(Player player, Player model, Function function){
 		PlayerTreeNode modelNode = tree.getNode(model);
-		PlayerTreeNode node = new PlayerTreeNode(player, functionsX, functionsY);
+		PlayerTreeNode node = new PlayerTreeNode(player, function);
 		node.setPlayer(player);
 		node.setParent(modelNode);
 		modelNode.addChild(node);
@@ -89,15 +91,26 @@ public class Level {
 	}
 	
 	public void handle(int frame){
+		this.frame = frame;
+		
 		PlayerTreeNode root = this.getTree().getRoot();
 		if(root != null){
-			Player player = root.getPlayer();
-			KeyboardInputHandler keyIn = this.getKeyIn();
-			
-			if(keyIn.isKeyPressed("ESCAPE")){
-				System.err.println("Game terminated.");
-				System.exit(0);
-			}
+ 			Player player = root.getPlayer();
+ 			double velX = 0;
+ 			double velY = 0;
+ 			
+ 			if(keyIn.isKeyPressed("UP")) velY = -1 * SV;
+ 			if(keyIn.isKeyPressed("DOWN")) velY = SV;
+ 			if(keyIn.isKeyPressed("LEFT")) velX = -1 * SV;
+ 			if(keyIn.isKeyPressed("RIGHT")) velX = SV;
+ 			
+ 			if(velX != 0 && velY != 0){
+ 				double mag = Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+ 				velX *= SV / mag;
+  				velY *= SV / mag;
+  			}
+ 			
+ 			root.calcVelocity(velX, velY);
 		}
 		
 		for(Sprite sprite: sprites) sprite.handle();

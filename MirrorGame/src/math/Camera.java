@@ -2,7 +2,7 @@ package math;
 
 import players.Player;
 import levels.Level;
-import game.Main;
+import game.Game;
 import sprites.Sprite;
 
 @Deprecated
@@ -16,9 +16,9 @@ public class Camera {
 	private double cameraTime = 30; // Frames it takes to move the camera
 	
 	private Level level;
-	private Main main;
+	private Game main;
 	
-	public Camera(Level level, Main main){
+	public Camera(Level level, Game main){
 		this.level = level;
 		this.main = main;
 	}

@@ -10,13 +10,11 @@ public class PlayerTreeNode {
 	private PlayerTreeNode parent;
 	private ArrayList<PlayerTreeNode> children = new ArrayList<PlayerTreeNode>();
 	private Player player; //the player this node is associated with
-	private ArrayList<Function> functionsX;
-	private ArrayList<Function> functionsY;
+	private Function function;
 	
-	public PlayerTreeNode(Player player, List<Function> functionsX, List<Function> functionsY) {
+	public PlayerTreeNode(Player player, Function function) {
 		this.player = player;
-		this.functionsX = new ArrayList<Function>(functionsX);
-		this.functionsY = new ArrayList<Function>(functionsY);
+		this.function = function;
 	}
 
 	//some functionality
@@ -69,20 +67,13 @@ public class PlayerTreeNode {
 			return false;
 	}
 	
-	public void calcVelocityX(double x){
-		for(Function function : functionsX)
-			x = function.execute(x);
-		player.setVelocityX(x);
+	public void calcVelocity(double x, double y){
+		double result[] = function.execute(x, y);
+		player.setVelocityX(result[0]);
+		player.setVelocityY(result[1]);
+		
 		for(PlayerTreeNode node : this.getChildren())
-			node.calcVelocityX(x);
-	}
-	
-	public void calcVelocityY(double y){
-		for(Function function : functionsY)
-			y = function.execute(y);
-		player.setVelocityY(y);
-		for(PlayerTreeNode node : this.getChildren())
-			node.calcVelocityY(y);
+			node.calcVelocity(result[0], result[1]);
 	}
 	
 	public void translateX(){
