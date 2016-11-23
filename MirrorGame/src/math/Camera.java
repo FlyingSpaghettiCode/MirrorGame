@@ -5,6 +5,7 @@ import levels.Level;
 import game.Main;
 import sprites.Sprite;
 
+@Deprecated
 public class Camera {
 	
 	private double scale = 1.0;
