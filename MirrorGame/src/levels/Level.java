@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import math.Camera;
 import math.Function;
 import players.Player;
 import players.PlayerTree;
 import players.PlayerTreeNode;
 import sounds.SoundPlayer;
-import game.Main;
+import game.Game;
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
 import javafx.scene.Scene;
@@ -22,13 +21,13 @@ import sprites.Sprite;
 
 /**
  * This is a level class
- * @authorsssssssssss Adriano, Patrick
+ * @authors Adriano, Patrick
  * @version 0.2
  * @date 25 July 2016
  */
 public class Level {
 
-	private Main main;
+	private Game main;
 	private ArrayList<Sprite> sprites;
 	private KeyboardInputHandler keyIn;
 	private MouseInputHandler mouseIn;
@@ -37,10 +36,9 @@ public class Level {
 	private Color background;
 	private double SV = 10;
 	private boolean reached = false;
-	private Camera camera;
 	private List<SoundPlayer> sounds;
 	
-	public Level(Scene scene, Main main) {
+	public Level(Scene scene, Game main) {
 		this.main = main;
 		this.scene = scene;
 		keyIn = new KeyboardInputHandler(scene);
@@ -49,7 +47,6 @@ public class Level {
 		tree = new PlayerTree(this);
 		background = Color.BLACK;
 		
-		camera = new Camera(this, main);
 	}
 
 
@@ -96,28 +93,11 @@ public class Level {
 		if(root != null){
 			Player player = root.getPlayer();
 			KeyboardInputHandler keyIn = this.getKeyIn();
-			double velX = 0;
-			double velY = 0;
-			
-			if(keyIn.isKeyPressed("UP")) velY = -1 * SV;
-			if(keyIn.isKeyPressed("DOWN")) velY = SV;
-			if(keyIn.isKeyPressed("LEFT")) velX = -1 * SV;
-			if(keyIn.isKeyPressed("RIGHT")) velX = SV;
-			
-			if(velX != 0 && velY != 0){
-				// Set the overall speed to SV
-				double mag = Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
-				velX *= SV / mag;
-				velY *= SV / mag;
-			}
 			
 			if(keyIn.isKeyPressed("ESCAPE")){
 				System.err.println("Game terminated.");
 				System.exit(0);
 			}
-			
-			root.calcVelocityX(velX);
-			root.calcVelocityY(velY);
 		}
 		
 		for(Sprite sprite: sprites) sprite.handle();
@@ -128,7 +108,6 @@ public class Level {
 		
 		this.handleCollisions();
 		
-		camera.update();
 		
 	}
 	
