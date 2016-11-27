@@ -16,8 +16,8 @@ public class MoveableSprite extends Sprite {
 	public MoveableSprite(Level level, double x, double y) {
 		super(level, x, y);
 	}
-	public MoveableSprite(Level level, double xPosition, double yPosition, String PATH) {
-		super(level, xPosition, yPosition, PATH);
+	public MoveableSprite(Level level, double xPosition, double yPosition, double width, double height, String PATH) {
+		super(level, xPosition, yPosition, width, height, PATH);
 	}
 	public MoveableSprite(Level level, String PATH) {
 		super(level, PATH);

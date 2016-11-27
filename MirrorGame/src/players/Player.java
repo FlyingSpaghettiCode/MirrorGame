@@ -20,8 +20,8 @@ public class Player extends MoveableSprite implements Collidable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Player(Level level, double xPosition, double yPosition, String PATH) {
-		super(level, xPosition, yPosition, PATH);
+	public Player(Level level, double xPosition, double yPosition, double width, double height, String PATH) {
+		super(level, xPosition, yPosition, width, height, PATH);
 		// TODO Auto-generated constructor stub
 	}
 

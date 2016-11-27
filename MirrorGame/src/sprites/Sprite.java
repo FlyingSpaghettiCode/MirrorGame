@@ -6,13 +6,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import images.ResizableImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import levels.Level;
 
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
 /**
  * A bear bones sprite class; it can display at given coordinates and display an image.
@@ -22,7 +23,7 @@ import javafx.scene.image.WritableImage;
  */
 public class Sprite extends Object{
 	//instance variables
-	private ResizableImage image;
+	private Image image;
 	private double xPosition;
 	private double yPosition;
 	private Level level;
@@ -36,30 +37,20 @@ public class Sprite extends Object{
 		this(level,0,0);
 	}
 	public Sprite(Level level, double x, double y){
-		this(level, x, y, "/images/testImage.png");
+		this(level, x, y, 50, 50, "/images/testImage.png");
 	}
-	public Sprite(Level level, double xPosition, double yPosition, String PATH){
+	public Sprite(Level level, double xPosition, double yPosition, double width, double height, String PATH){
 		//some basic init
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		image = new ResizableImage(PATH);
+		
+		image = new Image(PATH);
 
-		/*try {
-			BufferedImage bi = ImageIO.read(new File(PATH));
-			
-			image = new ResizableImage(bi.getWidth(), bi.getHeight());
-			PixelWriter pw = image.getPixelWriter();
-			for(int x = 0; x < bi.getWidth(); x++)
-				for(int y = 0; y < bi.getHeight(); y++)
-					pw.setArgb(x, y, bi.getRGB(x, y));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 		this.level = level;	
 		setName();
 	}
 	public Sprite(Level level, String PATH){
-		this(level,0,0,PATH);
+		this(level, 0, 0, 50, 50, PATH);
 	}
 	//constructors with limited functionality: NOT RECOMMENDED
 	public Sprite(){
@@ -70,8 +61,8 @@ public class Sprite extends Object{
 	}
 	
 	//all getters and setters for instance variables
-	public ResizableImage getImage() {return image;}
-	public void setImage(ResizableImage image) {this.image = image;}
+	public Image getImage() {return image;}
+	public void setImage(Image image) {this.image = image;}
 	public double getxPosition() {return xPosition;}
 	public void setxPosition(double xPosition) {this.xPosition = xPosition;}
 	public double getyPosition() {return yPosition;}
@@ -82,10 +73,26 @@ public class Sprite extends Object{
 	public void setName(String name) {this.name = name;}
 	
 	// Getters and setters for height and width
-	public double getHeight(){return this.getImage().getActualHeight();}
-	public double getWidth(){return this.getImage().getActualWidth();}
-	public void setHeight(double h){this.getImage().setHeight(h);}
-	public void setWidth(double w){this.getImage().setWidth(w);}
+	public double getHeight(){return level.main.tileW;}
+	public double getWidth(){return level.main.tileW;}
+	
+	public Image getColoredImage(Image im){
+		PixelReader bi = im.getPixelReader();
+		
+		WritableImage image = new WritableImage((int)im.getWidth(), (int)im.getHeight());
+		PixelWriter pw = image.getPixelWriter();
+		
+		Color c = new Color(red ? 1 : 0, green ? 1 : 0, blue ? 1 : 0, 1);
+		
+		for(int a = 0; a < (int)im.getWidth(); a++){
+			for(int b = 0; b < (int)im.getHeight(); b++){
+				Color color = bi.getColor(a, b);
+				pw.setColor(a, b, color.getRed() > 0 ? c : color);
+			}
+		}
+		
+		return image;
+	}
 	
 	//set a pretty random name of length 10
 	public void setName(){
@@ -103,7 +110,11 @@ public class Sprite extends Object{
 	public void handle(){}
 	//draw at it's coordinates
 	public void draw(GraphicsContext gc){
-		gc.drawImage(image, xPosition, yPosition, image.getActualWidth(), image.getActualHeight());
+		gc.drawImage(image, xPosition, yPosition, level.main.tileW, level.main.tileW);
+	}
+	
+	public void update(){
+		this.setImage(this.getColoredImage(this.getImage()));
 	}
 	
 	public boolean isRed(){

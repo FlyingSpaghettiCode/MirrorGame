@@ -27,7 +27,7 @@ import sprites.Sprite;
  */
 public class Level {
 
-	private Game main;
+	public Game main;
 	private ArrayList<Sprite> sprites;
 	private KeyboardInputHandler keyIn;
 	private MouseInputHandler mouseIn;
@@ -39,6 +39,8 @@ public class Level {
 	private List<SoundPlayer> sounds;
 	private int frame;
 	
+	private static Level instance;
+	
 	public Level(Scene scene, Game main) {
 		this.main = main;
 		this.scene = scene;
@@ -48,6 +50,7 @@ public class Level {
 		tree = new PlayerTree(this);
 		background = Color.BLACK;
 		
+		Level.instance = this;
 	}
 
 
@@ -64,6 +67,7 @@ public class Level {
 	public PlayerTree getTree(){return tree;}
 	public double getSV(){return SV;}
 	public void setSV(double SV){this.SV = SV;}
+	public static Level getInstance(){return Level.instance;}
 	
 	public void addSprite(Sprite sprite){
 		if(!sprites.contains(sprite)) sprites.add(sprite);
@@ -140,16 +144,13 @@ public class Level {
 				if(!(otherSprite instanceof Collidable) || !sameColor(sprite, otherSprite))
 					continue;
 				
-				boolean sM = sprite instanceof MoveableSprite;
-				boolean oM = otherSprite instanceof MoveableSprite;
-				if(!sM && !oM)
-					continue;
-				
 				double[] mtv;
-				if(sM)
+				if(sprite instanceof MoveableSprite)
 					mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
-				else
+				else if(otherSprite instanceof MoveableSprite)
 					mtv = ((Collidable) otherSprite).getHitbox().getMTV(((Collidable) sprite).getHitbox());
+				else
+					continue;
 				
 				//System.out.println(mtv[0] + " " + mtv[1]);
 				

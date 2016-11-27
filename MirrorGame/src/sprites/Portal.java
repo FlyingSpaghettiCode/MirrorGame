@@ -1,12 +1,16 @@
 package sprites;
 
-import images.ResizableImage;
+import javafx.scene.image.Image;
+import levels.Level;
+
 
 public class Portal extends Sprite implements Collidable {
 
 	Portal other;
 	
-	public Portal(double x, double y, boolean red, boolean green, boolean blue){
+	public Portal(Level level, double x, double y, boolean red, boolean green, boolean blue){
+		super(level, x, y);
+		
 		this.other = other;
 		this.setxPosition(x);
 		this.setyPosition(y);
@@ -14,7 +18,7 @@ public class Portal extends Sprite implements Collidable {
 		this.green = green;
 		this.blue = blue;
 		
-		this.setImage(new ResizableImage("/images/portal.png"));
+		this.setImage(this.getColoredImage(new Image("/images/portal.png")));
 	}
 	
 	public void setExit(Portal exit){
