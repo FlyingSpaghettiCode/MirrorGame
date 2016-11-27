@@ -9,13 +9,14 @@ import javax.imageio.ImageIO;
 import images.ResizableImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import levels.Level;
 
-import javafx.scene.image.WritableImage;
 
 /**
- * A bear bones sprite class; it can display at given coordinates and display an image.
+ * A bare bones sprite class; it can display at given coordinates and display an image.
  * @author Adriano Hernandez
  * @version 1.0
  * @date 24 July 2016
@@ -103,8 +104,33 @@ public class Sprite extends Object{
 	public void handle(){}
 	//draw at it's coordinates
 	public void draw(GraphicsContext gc){
-		gc.drawImage(image, xPosition, yPosition, image.getActualWidth(), image.getActualHeight());
+                PixelReader mask = image.getPixelReader();
+                PixelWriter canvas = gc.getPixelWriter();
+                int color = 0xFF000000 
+                        + (red ? 0x00FF0000 : 0) 
+                        + (green ? 0x0000FF00 : 0)
+                        + (blue ? 0x000000FF : 0);
+                for(int j = 0; j < image.getActualHeight(); j++)
+                    for(int i = 0; i < image.getActualWidth(); i++)
+                        canvas.setArgb(i + (int) xPosition, j + (int) yPosition, 
+                            (mask.getArgb((int)(i*image.getXRatio()), (int)(j*image.getYRatio())) & color)|0xFF000000);
+                
 	}
+        public void draw(WritableImage buffer)
+        {
+            PixelReader mask = image.getPixelReader();
+            PixelWriter canvas = buffer.getPixelWriter();
+            PixelReader source = buffer.getPixelReader();
+            int color = 0xFF000000 
+                + (red ? 0x00FF0000 : 0) 
+                + (green ? 0x0000FF00 : 0)
+                + (blue ? 0x000000FF : 0);
+            for(int j = 0; j < image.getActualHeight(); j++)
+                for(int i = 0; i < image.getActualWidth(); i++)
+                    canvas.setArgb(i + (int) xPosition, j + (int) yPosition, 
+                        (mask.getArgb((int)(i*image.getXRatio()), (int)(j*image.getYRatio())) & color)
+                                | source.getArgb(i + (int) xPosition, j + (int) yPosition));
+        }
 	
 	public boolean isRed(){
 		return red;
