@@ -10,7 +10,7 @@ import math.Hitbox;
  */
 public interface Collidable{
 	default Hitbox getHitbox(){
-		return new Hitbox(((Sprite)this).getxPosition(), ((Sprite)this).getyPosition(), ((Sprite)this).getImage().getActualWidth(), ((Sprite)this).getImage().getActualHeight());
+		return new Hitbox(((Sprite)this).getxPosition(), ((Sprite)this).getyPosition(), ((Sprite)this).getWidth(), ((Sprite)this).getHeight());
 	}
 	
 	void handle(Collidable otherSprite, double mtv[]);

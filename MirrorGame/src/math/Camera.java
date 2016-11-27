@@ -30,7 +30,7 @@ public class Camera {
 
 	
 	private void tryRequiredScaleFactor(){
-	
+		
 		double l = Double.MAX_VALUE;
 		double r = Double.MIN_VALUE;
 		double t = Double.MAX_VALUE;
@@ -98,8 +98,8 @@ public class Camera {
 		for(Sprite sprite : level.getSprites()){
 			sprite.setxPosition(sprite.getxPosition() * scale / factor);
 			sprite.setyPosition(sprite.getyPosition() * scale / factor);
-			sprite.setWidth(sprite.getWidth() * scale / factor);
-			sprite.setHeight(sprite.getHeight() * scale / factor);
+			//sprite.setWidth(sprite.getWidth() * scale / factor);
+			//sprite.setHeight(sprite.getHeight() * scale / factor);
 		}
 		
 		level.setSV(level.getSV() * scale / factor);
