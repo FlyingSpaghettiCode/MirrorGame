@@ -42,7 +42,7 @@ public class Game extends Application {
 	public double WIDTH = 1920;
 	public double HEIGHT = 1080;
 	
-	public double tileW = 25;
+	public double tileW = 40;
 
 	// main
 	public static void main(String[] args) {
@@ -126,9 +126,7 @@ public class Game extends Application {
 	// initialization for the game's current state
 	public void init(Stage stage) {
 		
-		ImageLoader iml = new ImageLoader("leftLever", "rightLever");
-		for(String s : iml.getImages().keySet())
-			System.out.println(s);
+		ImageLoader.load("leftLever", "rightLever", "portal");
 		
 		// init is here for now
 
@@ -162,51 +160,51 @@ public class Game extends Application {
 		// SPRITE AND INPUT AND SCENE
 		level = new Level(scene, this);
 
-		Portal po1 = new Portal(level, 500, 400, true, false, false);
-		Portal po2 = new Portal(level, 500, 150, true, false, false);
+		Portal po1 = new Portal(500, 400, tileW, tileW, true, false, false);
+		Portal po2 = new Portal(500, 150, tileW, tileW, true, false, false);
 		po1.setExit(po2);
 		level.addSprite(po1);
 		level.addSprite(po2);
 
 		for (int i = 1; i < 5; i++) {
-			level.addSprite(new Wall(level, 300, i * tileW, tileW, tileW, true, false, false, "red"));
-			level.addSprite(new Wall(level, 400, 500 + i * tileW, tileW, tileW, false, true, false, "green"));
-			level.addSprite(new Wall(level, 600, 500 + i * tileW, tileW, tileW, false, false, true, "blue"));
-			level.addSprite(new Wall(level, WIDTH - tileW, 500 + i * tileW, tileW, tileW, false, true, false, "green"));
+			level.addSprite(new Wall(300, i * tileW, tileW, tileW, true, false, false, "red"));
+			level.addSprite(new Wall(400, 500 + i * tileW, tileW, tileW, false, true, false, "green"));
+			level.addSprite(new Wall(600, 500 + i * tileW, tileW, tileW, false, false, true, "blue"));
+			level.addSprite(new Wall(WIDTH - tileW, 500 + i * tileW, tileW, tileW, false, true, false, "green"));
 		}
 
-		for (int i = 1; i <= 20; i++) {
+		for (int i = 1; i <= 15; i++) {
 			if (i == 10)
 				continue;
 
-			level.addSprite(new Wall(level, 300 + i * tileW, 250, tileW, tileW, true, false, false, "red"));
+			level.addSprite(new Wall(300 + i * tileW, 250, tileW, tileW, true, false, false, "red"));
 		}
 
-		level.addSprite(new Lever(300 + 20 * tileW, 400, true, true, false, level, level.getSprites().indexOf(po1),
-				"sprites.Sprite", "green", true, false));
-		level.addSprite(new Lever(300 + 20 * tileW, 500, false, true, true, level, level.getSprites().indexOf(po2),
+		level.addSprite(new Lever(300 + 20 * tileW, 300, tileW, tileW, true, false, true, level.getSprites().indexOf(po1),
 				"sprites.Sprite", "blue", true, false));
+		level.addSprite(new Lever(300 + 20 * tileW, 400, tileW, tileW, true, true, false, level.getSprites().indexOf(po1),
+				"sprites.Sprite", "green", true, false));
+		level.addSprite(new Lever(300 + 20 * tileW, 500, tileW, tileW, false, true, true, level.getSprites().indexOf(po2),
+				"sprites.Sprite", "blue", true, false));
+		level.addSprite(new Lever(300 + 20 * tileW, 600, tileW, tileW, true, true, true, level.getSprites().indexOf(po2),
+				"sprites.Sprite", "green", true, false));
 
-		Player p1 = new Player(level, "/images/red.png");
+		Player p1 = new Player(0, 0, tileW, tileW, "/images/red.png");
 		p1.red = true;
 		level.addPlayer(p1);
 
-		Player p2 = new Player(level, "/images/green.png");
+		Player p2 = new Player(900, 300, tileW, tileW, "/images/green.png");
 		p2.green = true;
-		p2.setxPosition(900);
-		p2.setyPosition(300);
 		level.addPlayer(p2, p1, new Function() {
 			@Override
 			public double[] execute(double x, double y) {
-				double[] result = { x * 2, y * 2 };
+				double[] result = { x * 1.25, y * 1.25 };
 				return result;
 			}
 		});
 		
-		Player p3 = new Player(level, "/images/blue.png");
+		Player p3 = new Player(500, 300, tileW, tileW, "/images/blue.png");
 		p3.blue = true;
-		p3.setxPosition(500);
-		p3.setyPosition(300);
 		level.addPlayer(p3, p1, new Function() {
 			@Override
 			public double[] execute(double x, double y) {

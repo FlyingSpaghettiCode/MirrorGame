@@ -21,43 +21,30 @@ import javafx.scene.paint.Color;
  * @version 1.0
  * @date 24 July 2016
  */
-public class Sprite extends Object{
+public abstract class Sprite extends Object{
 	//instance variables
 	private Image image;
 	private double xPosition;
 	private double yPosition;
-	private Level level;
+	protected Level level;
 	private String name;
 	public boolean red = false;
 	public boolean green = false;
 	public boolean blue = false;
 	
-	//constructors with full functionality
-	public Sprite(Level level) {
-		this(level,0,0);
-	}
-	public Sprite(Level level, double x, double y){
-		this(level, x, y, 50, 50, "/images/testImage.png");
-	}
-	public Sprite(Level level, double xPosition, double yPosition, double width, double height, String PATH){
+	public Sprite(double xPosition, double yPosition, double width, double height){
 		//some basic init
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 		
-		image = new Image(PATH);
-
-		this.level = level;	
+		this.level = Level.getInstance();	
 		setName();
 	}
-	public Sprite(Level level, String PATH){
-		this(level, 0, 0, 50, 50, PATH);
-	}
-	//constructors with limited functionality: NOT RECOMMENDED
-	public Sprite(){
-		this(null);
-		//if you do not wanna take input or interact with the level this works
-		//however, if you do wanna have a working sprite give the level
-		//the level is needed for input to work and other such events
+
+	public Sprite(double xPosition, double yPosition, double width, double height, String PATH){
+		this(xPosition, yPosition, width, height);
+		
+		image = new Image(PATH);
 	}
 	
 	//all getters and setters for instance variables
@@ -113,9 +100,7 @@ public class Sprite extends Object{
 		gc.drawImage(image, xPosition, yPosition, level.main.tileW, level.main.tileW);
 	}
 	
-	public void update(){
-		this.setImage(this.getColoredImage(this.getImage()));
-	}
+	public abstract void update();
 	
 	public boolean isRed(){
 		return red;

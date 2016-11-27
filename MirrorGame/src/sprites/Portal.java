@@ -1,24 +1,26 @@
 package sprites;
 
-import javafx.scene.image.Image;
-import levels.Level;
+import images.ColorUtil;
+import images.ImageLoader;
 
 
 public class Portal extends Sprite implements Collidable {
 
 	Portal other;
 	
-	public Portal(Level level, double x, double y, boolean red, boolean green, boolean blue){
-		super(level, x, y);
+	public Portal(double x, double y, double width, double height, boolean red, boolean green, boolean blue){
+		super(x, y, width, height);
 		
-		this.other = other;
-		this.setxPosition(x);
-		this.setyPosition(y);
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
 		
-		this.setImage(this.getColoredImage(new Image("/images/portal.png")));
+		this.update();
+	}
+	
+	@Override
+	public void update(){
+		this.setImage(ImageLoader.getImage("portal", ColorUtil.getColor(this)));
 	}
 	
 	public void setExit(Portal exit){

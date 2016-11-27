@@ -10,31 +10,29 @@ import javafx.scene.paint.Color;
 
 public class ImageLoader {
 	
-	HashMap<String, Image> images = new HashMap<String, Image>();
+	static HashMap<String, Image> images = new HashMap<String, Image>();
 	
-	Color[] colors = {Color.RED, Color.GREEN, Color.BLUE};
-	
-	public ImageLoader(String... names){
+	public static void load(String... names){
 		
-		images.put("red", this.loadImage("red"));
-		images.put("blue", this.loadImage("blue"));
-		images.put("green", this.loadImage("green"));
+		images.put("red", loadImage("red"));
+		images.put("blue", loadImage("blue"));
+		images.put("green", loadImage("green"));
 		
 		for(String name : names){
-			Image image = this.loadImage(name);
-			for(Color color : colors)
-				images.put(name+"."+color, this.getColoredImage(image, color));
+			Image image = loadImage(name);
+			for(Color color : ColorUtil.getAllColors())
+				images.put(name+"."+color, getColoredImage(image, color));
 		}
 		
 	}
 	
-	private Image loadImage(String name){
+	private static Image loadImage(String name){
 		
 		return new Image("/images/"+name+".png");
 		
 	}
 	
-	private Image getColoredImage(Image im, Color c){
+	private static Image getColoredImage(Image im, Color c){
 		PixelReader bi = im.getPixelReader();
 		
 		WritableImage image = new WritableImage((int)im.getWidth(), (int)im.getHeight());
@@ -50,11 +48,11 @@ public class ImageLoader {
 		return image;
 	}
 	
-	public HashMap<String, Image> getImages(){
+	public static HashMap<String, Image> getImages(){
 		return images;
 	}
 	
-	public Image getImage(String name, Color color){
+	public static Image getImage(String name, Color color){
 		return images.get(name+"."+color);
 	}
 

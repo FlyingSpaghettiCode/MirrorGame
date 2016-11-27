@@ -1,59 +1,46 @@
 package sprites;
 
-import java.util.Vector;
+public abstract class MoveableSprite extends Sprite {
 
-import levels.Level;
+	public MoveableSprite(double xPosition, double yPosition, double width, double height, String PATH) {
+		super(xPosition, yPosition, width, height, PATH);
+	}
 
-public class MoveableSprite extends Sprite {
-	
+	public MoveableSprite(double xPosition, double yPosition, double width, double height) {
+		super(xPosition, yPosition, width, height);
+	}
+
 	double velX;
 	double velY;
 
-	//constructors with full functionality
-	public MoveableSprite(Level level) {
-		super(level);
+	// movement and stuff
+	public void translateX(double x) {
+		this.setxPosition(this.getxPosition() + x);
 	}
-	public MoveableSprite(Level level, double x, double y) {
-		super(level, x, y);
+
+	public void translateY(double y) {
+		this.setyPosition(this.getyPosition() + y);
 	}
-	public MoveableSprite(Level level, double xPosition, double yPosition, double width, double height, String PATH) {
-		super(level, xPosition, yPosition, width, height, PATH);
-	}
-	public MoveableSprite(Level level, String PATH) {
-		super(level, PATH);
-	}
-	//constructors without full functionality
-	public MoveableSprite() {
-		super();
-	}
-	//movement and stuff
-	public void translateX(double x){
-		this.setxPosition(this.getxPosition()+x);
-	}
-	public void translateY(double y){
-		this.setyPosition(this.getyPosition()+y);
-	}
-	
-	//velocity
-	public void setVelocityX(double x){
+
+	// velocity
+	public void setVelocityX(double x) {
 		velX = x;
 	}
-	
-	public void setVelocityY(double y){
+
+	public void setVelocityY(double y) {
 		velY = y;
 	}
-	
-	public double getVelocityX(){
+
+	public double getVelocityX() {
 		return velX;
 	}
-	
-	public double getVelocityY(){
+
+	public double getVelocityY() {
 		return velY;
 	}
-	
-	/*@Override
-	public void handle(){
-		this.translateX(this.getVelocityX());
-		this.translateY(this.getVelocityY());
-	}*/
+
+	/*
+	 * @Override public void handle(){ this.translateX(this.getVelocityX());
+	 * this.translateY(this.getVelocityY()); }
+	 */
 }

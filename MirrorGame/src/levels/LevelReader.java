@@ -108,12 +108,8 @@ public class LevelReader implements LevelFactory{
 		}
 		else if(line.contains("add")){
 			
-			if(line.contains("sprite")){
-				Sprite sp = new Sprite();
-				lvl.addSprite(sp);
-			}
 			if(line.contains("wall")){
-				Wall w = new Wall(lvl, 0, 0, 50, 50, true, false, false, "red");
+				Wall w = new Wall(0, 0, 50, 50, true, false, false, "red");
 				
 			}
 			if(line.contains("portal")){
