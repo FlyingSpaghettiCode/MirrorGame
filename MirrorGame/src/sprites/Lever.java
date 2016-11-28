@@ -40,7 +40,7 @@ public class Lever extends Sprite implements Collidable {
 	
 	@Override
 	public void update(){
-		this.setImage(ImageLoader.getImage((on ? "right" : "left") + "Lever", ColorUtil.getColor(this)));
+		this.setImage(ImageLoader.getImage((on ? "right" : "left") + "Lever"));
 	}
 	
 	@Override

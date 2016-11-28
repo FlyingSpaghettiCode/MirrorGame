@@ -20,7 +20,7 @@ public class Portal extends Sprite implements Collidable {
 	
 	@Override
 	public void update(){
-		this.setImage(ImageLoader.getImage("portal", ColorUtil.getColor(this)));
+		this.setImage(ImageLoader.getImage("portal"));
 	}
 	
 	public void setExit(Portal exit){

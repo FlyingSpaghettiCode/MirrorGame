@@ -15,11 +15,11 @@ public abstract class MoveableSprite extends Sprite {
 
 	// movement and stuff
 	public void translateX(double x) {
-		this.setxPosition(this.getxPosition() + x);
+		this.setxPosition(Math.max(Math.min(this.getxPosition() + x, level.main.WIDTH - this.getWidth()), 0));
 	}
 
 	public void translateY(double y) {
-		this.setyPosition(this.getyPosition() + y);
+		this.setyPosition(Math.max(Math.min(this.getyPosition() + y, level.main.HEIGHT - this.getHeight()), 0));
 	}
 
 	// velocity

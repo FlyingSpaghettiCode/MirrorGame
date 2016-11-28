@@ -126,15 +126,13 @@ public class Game extends Application {
 	// initialization for the game's current state
 	public void init(Stage stage) {
 		
-		ImageLoader.load("leftLever", "rightLever", "portal");
+		ImageLoader.load("red", "green", "blue", "leftLever", "rightLever", "portal");
 		
 		// init is here for now
 
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		WIDTH = size.getWidth();
 		HEIGHT = size.getHeight();
-
-		stage.setTitle("Canvas Example");
 
 		root = new Group();
 		scene = new Scene(root);
@@ -165,14 +163,15 @@ public class Game extends Application {
 		po1.setExit(po2);
 		level.addSprite(po1);
 		level.addSprite(po2);
-
+		
 		level.addSprite(new Wall(300, tileW, tileW, tileW * 5, true, false, false, "red"));
+		level.addSprite(new Wall(300, tileW * 7, tileW * 20, tileW, true, false, false, "red"));
+
 		level.addSprite(new Wall(400, 500 + tileW, tileW, tileW * 5, false, true, false, "green"));
 		level.addSprite(new Wall(600, 500 + tileW, tileW, tileW * 5, false, false, true, "blue"));
 		level.addSprite(new Wall(WIDTH - tileW, 500 + tileW, tileW, tileW * 5, false, true, false, "green"));
 
-		level.addSprite(new Wall(300, 250, tileW * 20, tileW, true, false, false, "red"));
-
+		
 		level.addSprite(new Lever(300 + 20 * tileW, 300, tileW, tileW, true, false, true, level.getSprites().indexOf(po1),
 				"sprites.Sprite", "blue", true, false));
 		level.addSprite(new Lever(300 + 20 * tileW, 400, tileW, tileW, true, true, false, level.getSprites().indexOf(po1),
