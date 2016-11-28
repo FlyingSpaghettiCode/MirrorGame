@@ -61,25 +61,6 @@ public abstract class Sprite extends Object{
 	// Getters and setters for height and width
 	public double getHeight(){return level.main.tileW;}
 	public double getWidth(){return level.main.tileW;}
-	/**
-	public Image getColoredImage(Image im){
-		PixelReader bi = im.getPixelReader();
-		
-		WritableImage image = new WritableImage((int)im.getWidth(), (int)im.getHeight());
-		PixelWriter pw = image.getPixelWriter();
-		
-		Color c = new Color(red ? 1 : 0, green ? 1 : 0, blue ? 1 : 0, 1);
-		
-		for(int a = 0; a < (int)im.getWidth(); a++){
-			for(int b = 0; b < (int)im.getHeight(); b++){
-				Color color = bi.getColor(a, b);
-				pw.setColor(a, b, color.getRed() > 0 ? c : color);
-			}
-		}
-		
-		return image;
-	}
-        **/
 	
 	//set a pretty random name of length 10
 	public void setName(){
@@ -96,6 +77,7 @@ public abstract class Sprite extends Object{
 	//handle mechanisms that must be dealt with by the sprite
 	public void handle(){}
 	//draw at it's coordinates
+        //deprecated
 	public void draw(GraphicsContext gc){
                 PixelReader mask = image.getPixelReader();
                 PixelWriter canvas = gc.getPixelWriter();
@@ -103,13 +85,15 @@ public abstract class Sprite extends Object{
                         + (red ? 0x00FF0000 : 0) 
                         + (green ? 0x0000FF00 : 0)
                         + (blue ? 0x000000FF : 0);
+                double zoom = level.main.tileW/image.getWidth();
                 for(int j = 0; j < image.getHeight(); j++)
                     for(int i = 0; i < image.getWidth(); i++)
-                        canvas.setArgb(i + (int) xPosition, j + (int) yPosition, 
+                        canvas.setArgb((int)(i * zoom + xPosition), (int)(j * zoom + yPosition), 
                             (mask.getArgb(i,j) & color)|0xFF000000);
                 
 		//gc.drawImage(image, xPosition, yPosition, level.main.tileW, level.main.tileW);
 	}
+        //Draws at its coordinates. Can handle overlapping. 
         public void draw(WritableImage buffer)
         {
             PixelReader mask = image.getPixelReader();
@@ -119,11 +103,21 @@ public abstract class Sprite extends Object{
                 + (red ? 0x00FF0000 : 0) 
                 + (green ? 0x0000FF00 : 0)
                 + (blue ? 0x000000FF : 0);
+            double zoom = level.main.tileW/image.getWidth();
             for(int j = 0; j < image.getHeight(); j++)
                 for(int i = 0; i < image.getWidth(); i++)
-                    canvas.setArgb(i + (int) xPosition, j + (int) yPosition, 
-                        (mask.getArgb(i,j) & color)
-                                | source.getArgb(i + (int) xPosition, j + (int) yPosition));
+                {
+                    try
+                    {
+                        canvas.setArgb((int)(i * zoom + xPosition), (int)(j * zoom + yPosition), 
+                            (mask.getArgb(i,j) & color)|0xFF000000
+                                    | source.getArgb((int)(i * zoom + xPosition), (int)(j * zoom + yPosition)));
+                    }
+                    catch(IndexOutOfBoundsException e)
+                    {
+                    }
+                }
+            
         }
 	
 	public abstract void update();
