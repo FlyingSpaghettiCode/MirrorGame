@@ -14,6 +14,7 @@ import input.KeyboardInputHandler;
 import input.MouseInputHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import sprites.Collidable;
 import sprites.MoveableSprite;
@@ -194,7 +195,9 @@ public class Level {
 	public void draw(GraphicsContext gc){
 		gc.setFill(background);
 		gc.fillRect(0, 0, main.WIDTH, main.HEIGHT);
-		for(Sprite sprite: sprites) sprite.draw(gc);
+                WritableImage buffer = new WritableImage((int)gc.getCanvas().getWidth(),(int)gc.getCanvas().getHeight());
+		for(Sprite sprite: sprites) sprite.draw(buffer);
+                gc.drawImage(buffer, 0, 0);
 	}
 
 
