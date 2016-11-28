@@ -166,19 +166,12 @@ public class Game extends Application {
 		level.addSprite(po1);
 		level.addSprite(po2);
 
-		for (int i = 1; i < 5; i++) {
-			level.addSprite(new Wall(300, i * tileW, tileW, tileW, true, false, false, "red"));
-			level.addSprite(new Wall(400, 500 + i * tileW, tileW, tileW, false, true, false, "green"));
-			level.addSprite(new Wall(600, 500 + i * tileW, tileW, tileW, false, false, true, "blue"));
-			level.addSprite(new Wall(WIDTH - tileW, 500 + i * tileW, tileW, tileW, false, true, false, "green"));
-		}
+		level.addSprite(new Wall(300, tileW, tileW, tileW * 5, true, false, false, "red"));
+		level.addSprite(new Wall(400, 500 + tileW, tileW, tileW * 5, false, true, false, "green"));
+		level.addSprite(new Wall(600, 500 + tileW, tileW, tileW * 5, false, false, true, "blue"));
+		level.addSprite(new Wall(WIDTH - tileW, 500 + tileW, tileW, tileW * 5, false, true, false, "green"));
 
-		for (int i = 1; i <= 15; i++) {
-			if (i == 10)
-				continue;
-
-			level.addSprite(new Wall(300 + i * tileW, 250, tileW, tileW, true, false, false, "red"));
-		}
+		level.addSprite(new Wall(300, 250, tileW * 20, tileW, true, false, false, "red"));
 
 		level.addSprite(new Lever(300 + 20 * tileW, 300, tileW, tileW, true, false, true, level.getSprites().indexOf(po1),
 				"sprites.Sprite", "blue", true, false));
