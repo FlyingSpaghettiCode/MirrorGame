@@ -40,6 +40,8 @@ public class Level {
 	private List<SoundPlayer> sounds;
 	private int frame;
 	
+	private long time = 0;
+	
 	private static Level instance;
 	
 	public Level(Scene scene, Game main) {
@@ -100,7 +102,6 @@ public class Level {
 		
 		PlayerTreeNode root = this.getTree().getRoot();
 		if(root != null){
- 			Player player = root.getPlayer();
  			double velX = 0;
  			double velY = 0;
  			
@@ -119,67 +120,39 @@ public class Level {
 		}
 		
 		for(Sprite sprite: sprites) sprite.handle();
+		
 		if(root != null && !reached){
 			root.translateX();
 			root.translateY();
 		}
 		
 		this.handleCollisions();
-		
-		
 	}
 	
 	private void handleCollisions(){
 		
 		for(int i = 0; i < sprites.size(); i++){
-			
 			Sprite sprite = sprites.get(i);
 			
-			if(!(sprite instanceof Collidable))
+			if(!(sprite instanceof Collidable && sprite instanceof MoveableSprite))
 				continue;
-		
-			for(int j = i+1; j < sprites.size(); j++){
-				
+			
+			for(int j = 0; j < sprites.size(); j++){
+			
 				Sprite otherSprite = sprites.get(j);
+				
+				if(otherSprite instanceof MoveableSprite)
+					continue;
 				
 				if(!(otherSprite instanceof Collidable) || !sameColor(sprite, otherSprite))
 					continue;
 				
-				double[] mtv;
-				if(sprite instanceof MoveableSprite)
-					mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
-				else if(otherSprite instanceof MoveableSprite)
-					mtv = ((Collidable) otherSprite).getHitbox().getMTV(((Collidable) sprite).getHitbox());
-				else
-					continue;
-				
-				//System.out.println(mtv[0] + " " + mtv[1]);
+				double[] mtv = ((Collidable) sprite).getHitbox().getMTV(((Collidable) otherSprite).getHitbox());
 				
 				if(mtv[0] == 0 && mtv[1] == 0)
 					continue;
 				
-				
-				// Collision
-				/*boolean sM = sprite instanceof MoveableSprite;
-				boolean oM = otherSprite instanceof MoveableSprite;
-				
-				if(!sM && !oM)
-					continue;
-				
-				Sprite rightBottom;
-				if(mtv[0] > 0)
-					rightBottom = sprite.getxPosition() < otherSprite.getxPosition() ? otherSprite : sprite;
-				else
-					rightBottom = sprite.getyPosition() < otherSprite.getyPosition() ? otherSprite : sprite;
-				
-				Sprite target = sM ? sprite : otherSprite;
-				double mod = rightBottom.equals(target) ? 1 : -1;
-				// Handle collision
-				target.setxPosition(target.getxPosition() + mod * mtv[0]);
-				target.setyPosition(target.getyPosition() + mod * mtv[1]);*/
-				
-				((Collidable) sprite).handle((Collidable) otherSprite, mtv);
-				((Collidable) otherSprite).handle((Collidable) otherSprite, mtv);
+				((Collidable) otherSprite).handle((Collidable) sprite, mtv);
 			}
 		}
 	}

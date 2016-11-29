@@ -15,6 +15,7 @@ import math.Camera;
 import math.Function;
 import players.Player;
 import sounds.SoundPlayer;
+import sprites.Button;
 import sprites.Lever;
 import sprites.Portal;
 import sprites.Wall;
@@ -126,7 +127,7 @@ public class Game extends Application {
 	// initialization for the game's current state
 	public void init(Stage stage) {
 		
-		ImageLoader.load("red", "green", "blue", "leftLever", "rightLever", "portal");
+		ImageLoader.load("red", "green", "blue", "leftLever", "rightLever", "portal", "goal");
 		
 		// init is here for now
 
@@ -179,6 +180,10 @@ public class Game extends Application {
 		level.addSprite(new Lever(300 + 20 * tileW, 500, tileW, tileW, false, true, true, level.getSprites().indexOf(po2),
 				"sprites.Sprite", "blue", true, false));
 		level.addSprite(new Lever(300 + 20 * tileW, 600, tileW, tileW, true, true, true, level.getSprites().indexOf(po2),
+				"sprites.Sprite", "green", true, false));
+		
+
+		level.addSprite(new Button(300 + 20 * tileW, 700, tileW, tileW, true, true, false, level.getSprites().indexOf(po2),
 				"sprites.Sprite", "green", true, false));
 
 		Player p1 = new Player(0, 0, tileW, tileW, "/images/red.png");

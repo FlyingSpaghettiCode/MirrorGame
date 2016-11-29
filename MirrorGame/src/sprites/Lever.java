@@ -45,7 +45,6 @@ public class Lever extends Sprite implements Collidable {
 	
 	@Override
 	public void handle(Collidable otherSprite, double[] mtv) {
-		
 		MoveableSprite s = (MoveableSprite) otherSprite;
 		
 		s.setxPosition(s.getxPosition() + mtv[0]);
@@ -65,7 +64,6 @@ public class Lever extends Sprite implements Collidable {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
 
