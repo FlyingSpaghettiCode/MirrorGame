@@ -11,15 +11,15 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import levels.Level;
 import levels.LevelReader;
-import math.Camera;
 import math.Function;
+import menus.Menu;
+import menus.PauseMenu;
 import players.Player;
 import sounds.SoundPlayer;
 import sprites.Button;
 import sprites.Lever;
 import sprites.Portal;
 import sprites.Wall;
-import sprites.Menu;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -28,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import input.KeyboardInputHandler;
+import input.MouseInputHandler;
 
 /**
  * This is the main class.
@@ -67,8 +68,8 @@ public class Game extends Application {
 	int i;
 	boolean paused = false;
 	KeyboardInputHandler keyIn;
+	MouseInputHandler mouseIn;
 	Menu menu;
-	Camera camera;
 	///////////////////////////////////////////////////////////
 
 	public boolean isPaused() {
@@ -81,6 +82,10 @@ public class Game extends Application {
 
 	public KeyboardInputHandler getKeyIn() {
 		return keyIn;
+	}
+	
+	public MouseInputHandler getMouseIn(){
+		return mouseIn;
 	}
 
 	// this is a method called by launch that "starts" the game
@@ -139,7 +144,9 @@ public class Game extends Application {
 		scene = new Scene(root);
 
 		keyIn = new KeyboardInputHandler(scene);
-		menu = new Menu(this);
+		mouseIn = new MouseInputHandler(scene);
+		
+		menu = new PauseMenu(this, WIDTH/4, HEIGHT/4, WIDTH/2, HEIGHT/2);
 
 		stage.setScene(scene);
 		stage.setTitle("Mirror Game");
@@ -209,7 +216,6 @@ public class Game extends Application {
 				return result;
 			}
 		});
-		camera = new Camera(level, this);
 
 	}
 
