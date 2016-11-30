@@ -7,6 +7,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import math.Grid;
 
 public class Button extends Sprite implements Collidable {
 	
@@ -65,23 +66,13 @@ public class Button extends Sprite implements Collidable {
 			}
 		}
 		
-		PixelReader mask = this.getImage().getPixelReader();
-		PixelWriter canvas = buffer.getPixelWriter();
-		PixelReader source = buffer.getPixelReader();
-		
 		int diff = on ? 0x77 : 0;
 		
 		int color = 0xFF000000 + (red ? 0x00FF0000 - (diff << 16) : 0) + 
 				(green ? 0x0000FF00 - (diff << 8) : 0) + 
 				(blue ? 0x000000FF - diff : 0);
-		double zoomX = this.getWidth() / this.getImage().getWidth(); // Increment in x position
-		double zoomY = this.getHeight() / this.getImage().getHeight(); // Increment in y position
 		
-		for (int i = 0; i < this.getWidth(); i++)
-			for (int j = 0; j < this.getHeight(); j++)
-				canvas.setArgb((int) this.getxPosition() + i, (int) this.getyPosition() + j,
-						(mask.getArgb((int) (i / zoomX), (int) (j / zoomY)) & color) | 0xFF000000);
-
+		this.draw(color, buffer);
 	}
 	
 }

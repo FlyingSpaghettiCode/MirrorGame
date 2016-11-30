@@ -12,6 +12,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import levels.Level;
+import math.Grid;
 
 /**
  * A bare bones sprite class; it can display at given coordinates and display an
@@ -118,19 +119,28 @@ public abstract class Sprite extends Object {
 
 	// Draws at its coordinates. Can handle overlapping.
 	public void draw(WritableImage buffer) {
+		int color = 0xFF000000 + (red ? 0x00FF0000 : 0) + (green ? 0x0000FF00 : 0) + (blue ? 0x000000FF : 0);
+		this.draw(color, buffer);
+	}
+	
+	protected void draw(int color, WritableImage buffer){
 		PixelReader mask = image.getPixelReader();
 		PixelWriter canvas = buffer.getPixelWriter();
 		PixelReader source = buffer.getPixelReader();
-		int color = 0xFF000000 + (red ? 0x00FF0000 : 0) + (green ? 0x0000FF00 : 0) + (blue ? 0x000000FF : 0);
-		double zoomX = width / image.getWidth(); // Increment in x position
-		double zoomY = height / image.getHeight(); // Increment in y position
 
-		for (int i = 0; i < width; i++)
-			for (int j = 0; j < height; j++)
-				canvas.setArgb((int) xPosition + i, (int) yPosition + j,
+		int x = (int)Grid.tilesToPixels(xPosition);
+		int y = (int)Grid.tilesToPixels(yPosition);
+		double w = Grid.tilesToPixels(width);
+		double h = Grid.tilesToPixels(height);
+				
+		double zoomX = w / image.getWidth(); // Increment in x position
+		double zoomY = h / image.getHeight(); // Increment in y position
+		
+		for (int i = 0; i < w; i++)
+			for (int j = 0; j < h; j++)
+				canvas.setArgb(x + i, y + j,
 						(mask.getArgb((int) (i / zoomX), (int) (j / zoomY)) & color) | 0xFF000000
-								| source.getArgb((int) (i + xPosition), (int) (j + yPosition)));
-
+								| source.getArgb(x + i, y + j));
 	}
 
 	public abstract void update();

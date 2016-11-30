@@ -35,7 +35,7 @@ public class Level {
 	private Scene scene;
 	private PlayerTree tree;
 	private Color background;
-	private double SV = 10;
+	private double SV = 0.25;
 	private boolean reached = false;
 	private List<SoundPlayer> sounds;
 	private int frame;

@@ -1,5 +1,7 @@
 package sprites;
 
+import math.Grid;
+
 public abstract class MoveableSprite extends Sprite {
 
 	public MoveableSprite(double xPosition, double yPosition, double width, double height, String PATH) {
@@ -15,11 +17,11 @@ public abstract class MoveableSprite extends Sprite {
 
 	// movement and stuff
 	public void translateX(double x) {
-		this.setxPosition(Math.max(Math.min(this.getxPosition() + x, level.main.WIDTH - this.getWidth()), 0));
+		this.setxPosition(Math.max(Math.min(this.getxPosition() + x, Grid.WIDTH - this.getWidth()), 0));
 	}
 
 	public void translateY(double y) {
-		this.setyPosition(Math.max(Math.min(this.getyPosition() + y, level.main.HEIGHT - this.getHeight()), 0));
+		this.setyPosition(Math.max(Math.min(this.getyPosition() + y, Grid.HEIGHT - this.getHeight()), 0));
 	}
 
 	// velocity
