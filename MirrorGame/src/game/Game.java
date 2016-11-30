@@ -44,7 +44,7 @@ public class Game extends Application {
 
 	public double WIDTH = 1920;
 	public double HEIGHT = 1080;
-	
+
 	public double tileW = 40;
 
 	// main
@@ -84,8 +84,8 @@ public class Game extends Application {
 	public KeyboardInputHandler getKeyIn() {
 		return keyIn;
 	}
-	
-	public MouseInputHandler getMouseIn(){
+
+	public MouseInputHandler getMouseIn() {
 		return mouseIn;
 	}
 
@@ -132,13 +132,13 @@ public class Game extends Application {
 
 	// initialization for the game's current state
 	public void init(Stage stage) {
-		
+
 		ImageLoader.load("red", "green", "blue", "leftLever", "rightLever", "portal", "goal");
 
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		WIDTH = size.getWidth();
 		HEIGHT = size.getHeight();
-		
+
 		Grid.init(WIDTH, HEIGHT);
 
 		root = new Group();
@@ -146,8 +146,8 @@ public class Game extends Application {
 
 		keyIn = new KeyboardInputHandler(scene);
 		mouseIn = new MouseInputHandler(scene);
-		
-		menu = new PauseMenu(this, WIDTH/4, HEIGHT/4, WIDTH/2, HEIGHT/2);
+
+		menu = new PauseMenu(this, WIDTH / 4, HEIGHT / 4, WIDTH / 2, HEIGHT / 2);
 
 		stage.setScene(scene);
 		stage.setTitle("Mirror Game");
@@ -172,7 +172,7 @@ public class Game extends Application {
 		po1.setExit(po2);
 		level.addSprite(po1);
 		level.addSprite(po2);
-		
+
 		level.addSprite(new Wall(7, 1, 1, 5, true, false, false, "red"));
 		level.addSprite(new Wall(7, 7, 20, 1, true, false, false, "red"));
 
@@ -180,19 +180,17 @@ public class Game extends Application {
 		level.addSprite(new Wall(15, 13, 1, 5, false, false, true, "blue"));
 		level.addSprite(new Wall(Grid.WIDTH - 1, 13, 1, 5, false, true, false, "green"));
 
-		
-		level.addSprite(new Lever(30, 7, 1, 1, true, false, true, level.getSprites().indexOf(po1),
-				"sprites.Sprite", "blue", true, false));
-		level.addSprite(new Lever(30, 10, 1, 1, true, true, false, level.getSprites().indexOf(po1),
-				"sprites.Sprite", "green", true, false));
-		level.addSprite(new Lever(30, 13, 1, 1, false, true, true, level.getSprites().indexOf(po2),
-				"sprites.Sprite", "blue", true, false));
-		level.addSprite(new Lever(30, 16, 1, 1, true, true, true, level.getSprites().indexOf(po2),
-				"sprites.Sprite", "green", true, false));
-		
+		level.addSprite(new Lever(30, 7, 1, 1, true, false, true, level.getSprites().indexOf(po1), "sprites.Sprite",
+				"blue", true, false));
+		level.addSprite(new Lever(30, 10, 1, 1, true, true, false, level.getSprites().indexOf(po1), "sprites.Sprite",
+				"green", true, false));
+		level.addSprite(new Lever(30, 13, 1, 1, false, true, true, level.getSprites().indexOf(po2), "sprites.Sprite",
+				"blue", true, false));
+		level.addSprite(new Lever(30, 16, 1, 1, true, true, true, level.getSprites().indexOf(po2), "sprites.Sprite",
+				"green", true, false));
 
-		level.addSprite(new Button(27, 19, 1, 1, true, true, false, level.getSprites().indexOf(po2),
-				"sprites.Sprite", "green", true, false));
+		level.addSprite(new Button(27, 19, 1, 1, true, true, false, level.getSprites().indexOf(po2), "sprites.Sprite",
+				"green", true, false));
 
 		Player p1 = new Player(0, 0, 1, 1, "/images/red.png");
 		p1.red = true;
@@ -207,7 +205,7 @@ public class Game extends Application {
 				return result;
 			}
 		});
-		
+
 		Player p3 = new Player(13, 10, 1, 1, "/images/blue.png");
 		p3.blue = true;
 		level.addPlayer(p3, p1, new Function() {
@@ -241,7 +239,7 @@ public class Game extends Application {
 		if (keyIn.isKeyPressed("P")) {
 			this.setPaused(!this.isPaused());
 			keyIn.blockKey("P", 15);
-		} else if (keyIn.isKeyPressed("ESCAPE")) {
+		} else if (keyIn.isKeyPressed("BACK_SPACE")) {
 			System.err.println("Game terminated.");
 			System.exit(0);
 		}
@@ -257,10 +255,8 @@ public class Game extends Application {
 			menu.draw(gc);
 			gc.setFill(Color.WHITE);
 			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-			FontMetrics metrics = (new java.awt.Canvas())
-					.getFontMetrics(new java.awt.Font("Verdana", java.awt.Font.BOLD, 24));
-			gc.fillText("Paused", WIDTH / 2 - metrics.stringWidth("Paused") / 2.0,
-					HEIGHT / 2 - metrics.getAscent() / 2.0);
+			double[] metrics = Level.getFontMetrics(Font.font("Verdana", FontWeight.BOLD, 24), "Paused");
+			gc.fillText("Paused", WIDTH / 2 - metrics[0] / 2, HEIGHT / 2 + metrics[1] / 2);
 		}
 	}
 }

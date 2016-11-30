@@ -35,11 +35,15 @@ public class Menu implements MouseEventHandler {
 	}
 
 	public void draw(GraphicsContext gc) {
+		
 		gc.setFill(Color.GAINSBORO);
 		gc.fillRect(x, y, width, height);
 		
-		for(MenuElement element : elements)
+		for(MenuElement element : elements){
+			if(element.inside(oldMx, oldMy))
+				element.mouseHovering();
 			element.draw(gc);
+		}
 	}
 
 	@Override

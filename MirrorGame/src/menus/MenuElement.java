@@ -28,6 +28,10 @@ public class MenuElement {
 		
 	}
 	
+	public void mouseHovering(){
+		
+	}
+	
 	public void draw(GraphicsContext gc){
 		
 	}

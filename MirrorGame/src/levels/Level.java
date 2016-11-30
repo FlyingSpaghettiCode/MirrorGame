@@ -12,10 +12,15 @@ import sounds.SoundPlayer;
 import game.Game;
 import input.KeyboardInputHandler;
 import input.MouseInputHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import sprites.Collidable;
 import sprites.MoveableSprite;
 import sprites.Sprite;
@@ -171,6 +176,59 @@ public class Level {
                 WritableImage buffer = new WritableImage((int)gc.getCanvas().getWidth(),(int)gc.getCanvas().getHeight());
 		for(Sprite sprite: sprites) sprite.draw(buffer);
                 gc.drawImage(buffer, 0, 0);
+	}
+	
+	public static double[] getFontMetrics(Font font, String text){
+		
+		double[] metrics = new double[2];
+		GraphicsContext gc = new Canvas(1000, 1000).getGraphicsContext2D();
+		
+		Group root = new Group();
+		new Scene(root);
+		root.getChildren().add(gc.getCanvas());
+		
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, 1000, 1000);
+		gc.setFill(Color.WHITE);
+		gc.setFont(font);
+		gc.fillText(text, 0, 50);
+		
+		WritableImage image = new WritableImage(1000, 1000);
+		gc.getCanvas().snapshot(null, image);
+		
+		PixelReader reader = image.getPixelReader();
+		List<Integer> exists = new ArrayList<Integer>();
+		int sum = 0;
+		int height = 0;
+		
+		for(int i = 0; i < 1000; i++){
+			boolean here = false;
+			
+			for(int j = 50; j >= 0; j--){
+				if((reader.getArgb(i, j) & 0xFF) > 0){
+					here = true;
+					if(50 - j > height)
+						height = 50 - j;
+				}
+			}
+			
+			exists.add(here ? 1 : 0);
+			sum += here ? 1 : 0;
+			
+			if(exists.size() > 50){
+				sum -= exists.get(i - 50);
+				if(sum == 0){
+					metrics[0] = i - 49;
+					metrics[1] = height;
+					return metrics;
+				}
+			}
+			
+		}
+		
+		metrics[0] = 950;
+		metrics[1] = height;
+		return metrics;
 	}
 
 
