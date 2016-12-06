@@ -1,5 +1,4 @@
-#This holds the game settings, might be easier to keep the current last level instead (since they are sequential), but this way is just
-#clearer imo; change incomplete to complete for completion
+#change to complete for completion
 
 Level one status: incomplete
 Level two status: incomplete
