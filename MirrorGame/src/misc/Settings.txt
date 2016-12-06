@@ -1,1 +1,3 @@
 This holds the game settings
+
+Level one status: incomplete
