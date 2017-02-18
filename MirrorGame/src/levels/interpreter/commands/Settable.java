@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package levels.parseutil;
-
-import java.util.ArrayList;
+package levels.interpreter.commands;
 
 /**
  *
  * @author Edgar Lin
  */
-public class Form extends ArrayList {
-    
+interface Settable {
+    void set(Object value);
 }

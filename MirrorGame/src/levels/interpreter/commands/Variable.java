@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package levels.parseutil.commands;
+package levels.interpreter.commands;
 
-import levels.parseutil.commands.Settable;
+import levels.interpreter.commands.Settable;
 import java.util.Stack;
 
 /**

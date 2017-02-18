@@ -3,21 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package levels.parseutil.commands;
+package levels.interpreter.commands;
 
 import java.util.Stack;
 
 /**
- * Takes one argument from stack; prints it to standard output; no return.
+ * When executed, assigns the value in the second argument to the settable
+ * thing in the first argument. It returns that value to the stack. 
  * @author Edgar Lin
  */
-public class Print extends Command {
+public class Assign extends Command{
 
     @Override
     public void eval(Stack stack, int args) {
-        if(args > 1)
-            throw new Error("Arguments expected: 1; Arguments given:" + args);
-        System.out.println(stack.pop());
+        ((Settable) stack.pop()).set(stack.peek());
     }
     
 }

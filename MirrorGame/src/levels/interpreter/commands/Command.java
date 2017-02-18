@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package levels.parseutil.commands;
+package levels.interpreter.commands;
 
 import java.util.Stack;
 
