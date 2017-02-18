@@ -8,7 +8,16 @@ package levels.interpreter;
 import java.util.TreeMap;
 
 /**
- *
+ * A map that has some behaviors of a cactus stack implemented as a singly linked
+ * list of maps.
+ * 
+ * This is a node for a singly linked list of maps, intended to be used for a stack.
+ * 
+ * The map has been modified so that it is also aware of the maps beneath it on
+ * the stack (the parent maps). 
+ * 
+ * This class is used to implement lexical scoping.
+ * 
  * @author Edgar Lin
  */
 public class CactusStackMapNode<E,F> extends TreeMap<E,F> {

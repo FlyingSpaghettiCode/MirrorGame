@@ -12,7 +12,7 @@ import java.util.Stack;
 import levels.LevelReader;
 import levels.interpreter.CactusStackMapNode;
 import levels.interpreter.Interpreter;
-import levels.interpreter.commands.StdLibrary;
+import levels.interpreter.commands.std.StdLibrary;
 import levels.interpreter.parse.Parser;
 import levels.interpreter.parse.StringIterator;
 

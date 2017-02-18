@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package levels.interpreter.commands;
+package levels.interpreter.commands.std;
 
 import levels.interpreter.CactusStackMapNode;
+import levels.interpreter.commands.Command;
 
 /**
- *
+ * Is a node on a cactus stack of maps. 
  * @author Edgar Lin
  */
 public class StdLibrary extends CactusStackMapNode<String, Command>{
@@ -22,5 +23,6 @@ public class StdLibrary extends CactusStackMapNode<String, Command>{
         super(parent);
         this.put("print", new Print());
         this.put("=", new Assign());
+        this.put("prog", new Prog());
     }
 }

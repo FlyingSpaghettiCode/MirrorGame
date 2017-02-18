@@ -6,6 +6,7 @@
 package levels.interpreter.commands;
 
 import java.util.Stack;
+import levels.interpreter.CactusStackMapNode;
 
 /**
  *
@@ -28,6 +29,6 @@ public abstract class Command {
      * @param stack 
      * @param args number of arguments to take from stack.
      */
-    public abstract void eval(Stack stack, int args);
+    public abstract void eval(Stack stack, CactusStackMapNode symMap, int args);
     
 }

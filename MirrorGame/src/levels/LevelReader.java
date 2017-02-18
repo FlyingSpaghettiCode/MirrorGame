@@ -14,7 +14,7 @@ import levels.interpreter.commands.Command;
 import levels.interpreter.Interpreter;
 import levels.interpreter.parse.Parser;
 import levels.interpreter.parse.StringIterator;
-import levels.interpreter.commands.StdLibrary;
+import levels.interpreter.commands.std.StdLibrary;
 
 /**
  * Parses a text document that tells how to build the level.

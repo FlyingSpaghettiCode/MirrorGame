@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package levels.interpreter.commands;
+package levels.interpreter.commands.std;
 
-import levels.interpreter.commands.Settable;
 import java.util.Stack;
+import levels.interpreter.CactusStackMapNode;
+import levels.interpreter.commands.Command;
 
 /**
  * Variable: represents a variable, a command which takes no arguments and
@@ -20,7 +21,7 @@ public class Variable extends Command implements Settable{
         this.value = value;
     }
     @Override
-    public void eval(Stack stack, int args) {
+    public void eval(Stack stack, CactusStackMapNode symMap, int args) {
         if(args>0)
             throw new Error("Attempting to access a variable using "+ Integer.toString(args) + " arguments.");
         stack.push(value);

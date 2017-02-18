@@ -8,7 +8,7 @@ package levels.interpreter;
 import java.util.Stack;
 import levels.Level;
 import levels.interpreter.commands.Command;
-import levels.interpreter.commands.Variable;
+import levels.interpreter.commands.std.Variable;
 
 /**
  * Holds utility methods to interpret and execute parsed abstract symbol trees.
@@ -39,7 +39,7 @@ public class Interpreter {
                     else
                         stack.push(((Form) ast).get(i));
                 }
-                command.eval(stack, ((Form) ast).size()-1);
+                command.eval(stack, symMap, ((Form) ast).size()-1);
             }
             else
                 stack.push(ast);
