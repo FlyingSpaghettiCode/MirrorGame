@@ -7,11 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.Game;
+import java.util.Stack;
 import sprites.Lever;
 import sprites.Portal;
 import sprites.Sprite;
 import sprites.Wall;
 import javafx.scene.Scene;
+import levels.parseutil.CactusStackMapNode;
+import levels.parseutil.commands.Command;
+import levels.parseutil.Form;
+import levels.parseutil.StringIterator;
+import levels.parseutil.Symbol;
+import levels.parseutil.commands.Variable;
+import levels.parseutil.commands.StdLibrary;
 import sounds.SoundPlayer;
 
 /**
@@ -20,7 +28,7 @@ import sounds.SoundPlayer;
  * 
  * This is basicallly a factory class that reads from a txt file.
  * The language is interpreted as a list of additions to the class that are analysed by line
- * sequentially.  More syntax information is on another dock in this folder labelled "SynaxInformation"
+ * sequentially.  More syntax information is on another dock in this folder labelled "SyntaxInformation"
  * @author Adriano
  * @version 0.3
  * @date 5 September 2016
@@ -30,11 +38,19 @@ public class LevelReader implements LevelFactory{
 
 	//basic shit
 	private String PATH;
+        private String text;
 	private Scene scene;
 	private Game main;
+        private CactusStackMapNode<String, Command> symMap;
 	//PATH CAN GO ANYWHERE ON COMP
 	public LevelReader(String PATH) {
 		this.PATH = PATH;
+                List<String> lines = new ArrayList<String>();
+		//get the lines of text from the level file
+		try {lines = docText();} 
+		catch (IOException e) {e.printStackTrace();}
+		text = simplifyLines(lines);
+                initializeInterpreter();
 		// TODO Auto-generated constructor stub
 	}
 	public LevelReader(){
@@ -56,88 +72,128 @@ public class LevelReader implements LevelFactory{
 		return editLevel(new StandardLevel(scene, main));
 	}
 	public Level editLevel(Level lvl){
-		List<String> lines = new ArrayList<String>();
-		//get the lines of text from the level file
-		try {lines = docText();} 
-		catch (IOException e) {e.printStackTrace();}
-		simplifyLines(lines);
-		for(String line: lines){
-			if(line.indexOf("\n") != -1){	//to avoid confusing paths and the like
-				readLine(lvl,line.substring(0,line.indexOf("\n")));
-			}
-			else readLine(lvl,line);
-		}
-		return lvl;
+		StringIterator code = new StringIterator(text);
+                while(!code.hasNext())
+                    interpret(lvl, parse(code), new Stack());
+                return lvl;
 	}
-	//simplifies the lines into easier code for the machine to read
-	//moves includes to the front
-	//turns multi lined commands into single lines
-	
-	private void simplifyLines(List<String> ls){
-		for(int i = ls.size()-1; i >= 0; i--){
-			//REMOVE COMMENTS
-			if(ls.contains("#"))
-				ls.set(i, ls.get(i).substring(0, ls.get(i).indexOf("#")));// take out comments
-			//REMOVE MULTI LINED STATEMENTS
-			if(i > 0 && ls.get(i).substring(0, 1).equals("\\")){
-				ls.set(i-1, ls.get(i-1) + ls.get(i));
-				ls.remove(i);
-			}
-			//REMOVE DUAL STATEMENTS
-			if(ls.get(i).contains("&&")){
-				String nl = ls.get(i).substring(ls.get(i).indexOf("&&")+2);
-				ls.set(i, ls.get(i).substring(0, ls.get(i).indexOf("&&")));
-				ls.add(i,nl);
-			}
-			
-			
-			//REMOVE EMPTY LINES
-			if(ls.get(i).length() < 1)
-				ls.remove(i);
-		}
+	public void initializeInterpreter()
+        {
+            symMap = new CactusStackMapNode(null);
+            StdLibrary.load(symMap);
+        }
+	// Removes line comments and consolidates into single string to ease parsing.
+        // Leading and trailing spaces removed. Line breaks converted to spaces.
+	private String simplifyLines(List<String> ls){
+                String ret = "";
+		for(String i:ls)
+                {
+                    String a = i.trim(); // removes leading and trailing whitespace
+                    a = a.substring(0, a.indexOf('#')); // removes line comments
+                    if(!a.equals(""))
+                        ret += " " + a;
+                }
+                return ret;
 	}
+        public void interpret(Level lvl, Object ast, Stack stack)
+        {
+            if(ast instanceof Symbol)
+            {
+                if(symMap.containsKey(((Symbol) ast).getSymbol()))
+                    stack.push(symMap.get(((Symbol)ast).getSymbol()));
+                else
+                {
+                    Variable var = new Variable(null);
+                    symMap.put(((Symbol) ast).getSymbol(), var);
+                    stack.push(var);
+                }
+            }
+            else if(ast instanceof Form)
+            {
+                interpret(lvl, ((Form) ast).get(0), stack);
+                Command command = (Command) stack.pop();
+                for(int i = ((Form) ast).size() - 1; i > 0 ; i--) // puts the contents of the form in the stack so that the first element (excluding the command) is on top.
+                {
+                    if(command.isEager(i))
+                        interpret(lvl, ((Form) ast).get(i), stack);
+                    else
+                        stack.push(((Form) ast).get(i));
+                }
+                command.eval(stack, ((Form) ast).size()-1);
+            }
+            else
+                stack.push(ast);
+        }
+        public static Object parse(StringIterator code)
+        {
+            code.trim();
+            char first = (char) code.next();
+            
+            
+            switch(first)
+            {
+                case '\"':
+                    return parseString(code);
+                case '(':
+                    Form elements = new Form();
+                    do
+                    {
+                        elements.add(parse(code));
+                    }
+                    while((char)code.next()!=')');
+                    return elements;
+                default:
+                    String symbol = first + code.next(Math.min(//tokenizes to next space or close paren
+                            code.content().indexOf(' ')&0xffff,//&0xffff cpnverts to unsigned so that error (-1) >> any real value
+                            code.content().indexOf(')')&0xffff));
+                    try
+                    {
+                        return Integer.parseInt(symbol);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        try
+                        {
+                            return Double.parseDouble(symbol);
+                        }
+                        catch(NumberFormatException f)
+                        {
+                            return new Symbol(symbol);
+                        }
+                    }
+                    
+            }
+        }
 	
-	//will read a line and analyze it (this is a line by line script)
-	private void readLine(Level lvl, String line){
-		if(line.contains("include")){
-			//this is crude, but should be the path
-			String include_PATH = line.substring(line.indexOf("include " + 8)); //get the path
-			LevelReader alt_reader = new LevelReader(include_PATH); //read from the alt path
-			lvl = alt_reader.editLevel(lvl); //edit the level 
-			return;
-		}
-		else if(line.contains("add")){
-			
-			if(line.contains("wall")){
-				Wall w = new Wall(0, 0, 50, 50, true, false, false, "red");
-				
-			}
-			if(line.contains("portal")){
-				String data = line.substring(line.indexOf("portal")+6);
-				
-				//Portal p = new Portal(0, 0, false, false, false, p, false);
-				
-			}
-			if(line.contains("lever")){
-				String data = line.substring(line.indexOf("lever")+5);
-				//Lever lv = new Lever(0, 0, false, false, false, lvl);
-			}
-			else if(line.contains("playertree")){
-				
-			}
-			if(line.contains("button")){
-				
-			}
-			else if(line.contains("sound")){
-				lvl.getSounds().add(new SoundPlayer(
-						line.substring(line.indexOf("sound ")+6)));
-			}
-		}
-		else{
-			return;
-		}
-	}
-	
+        public static String parseString(StringIterator code)
+        {
+            String pstring = "";
+            char next;
+            do
+            {
+                pstring += code.next(Math.min( // gets the string up to the next escape or quote
+                        code.content().indexOf("\\")&0xffff, // &0xffff converts to unsigned; this causes error (-1) to be >> than any value
+                        code.content().indexOf("\"")&0xffff));
+                next = (char) code.next();
+                if(next == '\\')
+                {
+                    switch((char)code.next())
+                    {
+                        case '\"':
+                            pstring += '\"';
+                            break;
+                        case '\\':
+                            pstring += '\"';
+                            break;
+                    }
+                }
+                
+            }
+            while(next != '\"');
+            
+            return pstring;
+        }
+
 	/////////////////////////////////////////////////////
 	//getters
 	public String getPATH() {

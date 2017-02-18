@@ -96,28 +96,33 @@ public abstract class Sprite extends Object{
         //Draws at its coordinates. Can handle overlapping. 
         public void draw(WritableImage buffer)
         {
-            PixelReader mask = image.getPixelReader();
-            PixelWriter canvas = buffer.getPixelWriter();
-            PixelReader source = buffer.getPixelReader();
             int color = 0xFF000000 
                 + (red ? 0x00FF0000 : 0) 
                 + (green ? 0x0000FF00 : 0)
                 + (blue ? 0x000000FF : 0);
-            double zoom = level.main.tileW/image.getWidth();
+            draw((int) xPosition, (int) yPosition, level.main.tileW, buffer, image, color);
+            //draw((int) (xPosition + level.main.tileW/4), (int) (yPosition + level.main.tileW/4), level.main.tileW, buffer, image, color & 0xFF8F8F8F);
+        }
+        
+        protected void draw(int x, int y, double scale, WritableImage buffer, Image maskImage, int color)
+        {
+            PixelReader mask = maskImage.getPixelReader();
+            PixelWriter canvas = buffer.getPixelWriter();
+            PixelReader source = buffer.getPixelReader();
+            double zoom = scale/image.getWidth();
             for(int j = 0; j < image.getHeight(); j++)
                 for(int i = 0; i < image.getWidth(); i++)
                 {
                     try
                     {
-                        canvas.setArgb((int)(i * zoom + xPosition), (int)(j * zoom + yPosition), 
+                        canvas.setArgb((int)(i * zoom + x), (int)(j * zoom + y), 
                             (mask.getArgb(i,j) & color)|0xFF000000
-                                    | source.getArgb((int)(i * zoom + xPosition), (int)(j * zoom + yPosition)));
+                                    | source.getArgb((int)(i * zoom + x), (int)(j * zoom + y)));
                     }
                     catch(IndexOutOfBoundsException e)
                     {
                     }
                 }
-            
         }
 	
 	public abstract void update();
