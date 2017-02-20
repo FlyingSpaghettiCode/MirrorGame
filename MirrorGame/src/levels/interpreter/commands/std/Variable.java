@@ -32,7 +32,7 @@ public class Variable extends Command implements Settable{
     }
     public String toString()
     {
-        return "<variable with value " + value + ">";
+        return "<pointer to variable with value " + value + ">";
     }
     
 }

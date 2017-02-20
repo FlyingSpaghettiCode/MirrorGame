@@ -19,7 +19,7 @@ public class Prog extends Command{
      * Evaluates the prog command over the arguments in the stack. 
      * @param stack The args & return stack. 
      * @param symMap The map of lexical bindings to evaluate this command in.
-     * @param args Should be > 0
+     * @param args Number of commands to execute in succession.
      */
     @Override
     public void eval(Stack stack, CactusStackMapNode symMap, int args) {
@@ -30,7 +30,7 @@ public class Prog extends Command{
             nstack = new Stack();
             Interpreter.interpret(stack.pop(), nstack, symMap);
         }
-        if(nstack != null && !nstack.empty())
+        if(nstack != null)
             stack.push(nstack.pop());
     }
     

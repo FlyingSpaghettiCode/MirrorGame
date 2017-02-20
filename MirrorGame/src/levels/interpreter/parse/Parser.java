@@ -48,7 +48,17 @@ public class Parser {
                         }
                         catch(NumberFormatException f)
                         {
-                            return new Symbol(symbol);
+                            switch(symbol) // handles special tokens (null, true, false); otherwise, treats it as a name.
+                            {
+                                case "true":
+                                    return true;
+                                case "false":
+                                    return false;
+                                case "null":
+                                    return null;
+                                default:
+                                    return new Symbol(symbol);
+                            }
                         }
                     }
                     

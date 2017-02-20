@@ -10,17 +10,15 @@ import levels.interpreter.CactusStackMapNode;
 import levels.interpreter.commands.Command;
 
 /**
- * Takes one argument from stack; prints it to standard output; no return.
+ * Returns the logical not of the argument. 
  * @author Edgar Lin
  */
-public class Print extends Command {
+public class Not extends Command 
+{
 
     @Override
     public void eval(Stack stack, CactusStackMapNode symMap, int args) {
-        if(args > 1)
-            throw new Error("Arguments expected: 1; Arguments given:" + args);
-        System.out.println(stack.pop());
-        stack.push(null);
+        stack.push(! (Boolean) stack.pop());
     }
     
 }
