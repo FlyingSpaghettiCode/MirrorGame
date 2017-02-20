@@ -13,23 +13,12 @@ public class ImageLoader {
 	static HashMap<String, Image> images = new HashMap<String, Image>();
 	
 	public static void load(String... names){
-		
-		images.put("red", loadImage("red"));
-		images.put("blue", loadImage("blue"));
-		images.put("green", loadImage("green"));
-		
-		for(String name : names){
-			Image image = loadImage(name);
-			for(Color color : ColorUtil.getAllColors())
-				images.put(name+"."+color, getColoredImage(image, color));
-		}
-		
+		for(String name : names)
+			images.put(name, loadImage(name));
 	}
 	
 	private static Image loadImage(String name){
-		
 		return new Image("/images/"+name+".png");
-		
 	}
 	
 	private static Image getColoredImage(Image im, Color c){
@@ -52,8 +41,8 @@ public class ImageLoader {
 		return images;
 	}
 	
-	public static Image getImage(String name, Color color){
-		return images.get(name+"."+color);
+	public static Image getImage(String name){
+		return images.get(name);
 	}
 
 }

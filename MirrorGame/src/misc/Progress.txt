@@ -1,0 +1,34 @@
+#change to complete for completion
+
+Current level: 1
+Level one status: incomplete
+Level two status: incomplete
+Level three status: incomplete
+Level four status: incomplete
+Level five status: incomplete
+Level six status: incomplete
+Level seven status: incomplete
+Level eight status: incomplete
+Level nine status: incomplete
+Level ten status: incomplete
+Level eleven status: incomplete
+Level twelve status: incomplete
+Level thirteen status: incomplete
+Level fourteen status: incomplete
+Level fifthteen status: incomplete
+Level sixteen status: incomplete
+Level eighteen status: incomplete
+Level nineteen status: incomplete
+Level twenty status: incomplete
+Level twenty one status: incomplete
+Level twenty two status: incomplete
+Level twenty three status: incomplete
+Level twenty four status: incomplete
+Level twenty five status: incomplete
+Level twenty six status: incomplete
+Level twenty seven status: incomplete
+Level twenty eight status: incomplete
+Level twenty nine status: incomplete
+Level thirty status: incomplete
+Secret Level Status: incomplete
+#etc?

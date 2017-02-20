@@ -1,0 +1,1 @@
+Includes aux files for pictures that did not completely fit.  Everything is in perfect sequential order.

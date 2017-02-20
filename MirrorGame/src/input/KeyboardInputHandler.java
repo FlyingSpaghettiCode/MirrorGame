@@ -54,7 +54,7 @@ public class KeyboardInputHandler {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				String code = e.getCode().toString();
-
+				//System.out.println(code);
 				// only add once... prevent duplicates
 				if (!noflylist.containsKey(code))
 					input.add(code);
