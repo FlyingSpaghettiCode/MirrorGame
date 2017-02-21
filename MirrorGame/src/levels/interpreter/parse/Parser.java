@@ -38,7 +38,7 @@ public class Parser {
                             code.content().indexOf(')')&0xffff));
                     try
                     {
-                        return Integer.parseInt(symbol);
+                        return Long.parseLong(symbol);
                     }
                     catch(NumberFormatException e)
                     {
