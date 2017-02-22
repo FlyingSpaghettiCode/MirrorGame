@@ -9,6 +9,6 @@ package levels.interpreter.commands.std;
  *
  * @author Edgar Lin
  */
-interface Settable {
+public interface Settable {
     void set(Object value);
 }

@@ -38,5 +38,7 @@ public class StdLibrary extends CactusStackMapNode<String, Command>{
         this.put(">", new Greater());
         this.put("<=", new LessEqual());
         this.put(">=", new GreaterEqual());
+        this.put("list", new FList());
+        this.put("elt", new Elt());
     }
 }
