@@ -18,7 +18,7 @@ public class Button extends Sprite implements Collidable {
 	Object onVal;
 	Object offVal;
 	
-	public Button(double xPosition, double yPosition, double width, double height, boolean red, boolean green, boolean blue, int target, String clazz, String field, Object onVal, Object offVal) {
+	public Button(double xPosition, double yPosition, double width, double height, boolean red, boolean green, boolean blue, Sprite target, String clazz, String field, Object onVal, Object offVal) {
 		super(xPosition, yPosition, width, height);
 		
 		this.red = red;
@@ -28,7 +28,7 @@ public class Button extends Sprite implements Collidable {
 		this.onVal = onVal;
 		this.offVal = offVal;
 		
-		this.target = level.getSprite(target);
+		this.target = target;
 		
 		try {
 			this.field = Class.forName(clazz).getDeclaredField(field);

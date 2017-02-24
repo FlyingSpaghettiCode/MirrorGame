@@ -180,16 +180,16 @@ public class Game extends Application {
 		level.addSprite(new Wall(15, 13, 1, 5, false, false, true, "blue"));
 		level.addSprite(new Wall(Grid.WIDTH - 1, 13, 1, 5, false, true, false, "green"));
 
-		level.addSprite(new Lever(30, 7, 1, 1, true, false, true, level.getSprites().indexOf(po1), "sprites.Sprite",
+		level.addSprite(new Lever(30, 7, 1, 1, true, false, true, po1, "sprites.Sprite",
 				"blue", true, false));
-		level.addSprite(new Lever(30, 10, 1, 1, true, true, false, level.getSprites().indexOf(po1), "sprites.Sprite",
+		level.addSprite(new Lever(30, 10, 1, 1, true, true, false, po1, "sprites.Sprite",
 				"green", true, false));
-		level.addSprite(new Lever(30, 13, 1, 1, false, true, true, level.getSprites().indexOf(po2), "sprites.Sprite",
+		level.addSprite(new Lever(30, 13, 1, 1, false, true, true, po2, "sprites.Sprite",
 				"blue", true, false));
-		level.addSprite(new Lever(30, 16, 1, 1, true, true, true, level.getSprites().indexOf(po2), "sprites.Sprite",
+		level.addSprite(new Lever(30, 16, 1, 1, true, true, true, po2, "sprites.Sprite",
 				"green", true, false));
 
-		level.addSprite(new Button(27, 19, 1, 1, true, true, false, level.getSprites().indexOf(po2), "sprites.Sprite",
+		level.addSprite(new Button(27, 19, 1, 1, true, true, false, po2, "sprites.Sprite",
 				"green", true, false));
 
 		Player p1 = new Player(0, 0, 1, 1, "/images/red.png");

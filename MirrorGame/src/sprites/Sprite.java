@@ -35,7 +35,6 @@ public abstract class Sprite extends Object {
 		this.width = width;
 		this.height = height;
 
-		this.level = Level.getInstance();
 		setName();
 	}
 

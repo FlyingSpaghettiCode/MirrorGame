@@ -46,9 +46,7 @@ public class Level {
 	private int frame;
 	
 	private long time = 0;
-	
-	private static Level instance;
-	
+		
 	public Level(Scene scene, Game main) {
 		this.main = main;
 		this.scene = scene;
@@ -58,7 +56,6 @@ public class Level {
 		tree = new PlayerTree(this);
 		background = Color.BLACK;
 		
-		Level.instance = this;
 	}
 
 
@@ -75,13 +72,14 @@ public class Level {
 	public PlayerTree getTree(){return tree;}
 	public double getSV(){return SV;}
 	public void setSV(double SV){this.SV = SV;}
-	public static Level getInstance(){return Level.instance;}
 	
 	public void addSprite(Sprite sprite){
 		if(!sprites.contains(sprite)) sprites.add(sprite);
+                sprite.setLevel(this);
 	}
 	public void removeSprite(Sprite sprite){
 		sprites.remove(sprite);
+                sprite.setLevel(null);
 	}
 	
 	public void addPlayer(Player player){

@@ -14,7 +14,7 @@ public class Lever extends Sprite implements Collidable {
 	Object onVal;
 	Object offVal;
 
-	public Lever(double x, double y, double width, double height, boolean red, boolean green, boolean blue, int target,
+	public Lever(double x, double y, double width, double height, boolean red, boolean green, boolean blue, Sprite target,
 			String clazz, String field, Object onVal, Object offVal) {
 		super(x, y, width, height);
 
@@ -27,7 +27,7 @@ public class Lever extends Sprite implements Collidable {
 		this.onVal = onVal;
 		this.offVal = offVal;
 
-		this.target = level.getSprite(target);
+		this.target = target;
 
 		try {
 			this.field = Class.forName(clazz).getDeclaredField(field);
